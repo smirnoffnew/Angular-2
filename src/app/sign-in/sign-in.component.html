@@ -1,0 +1,40 @@
+<md-card>
+  <md-card-title class="center" >Sign In</md-card-title>
+  <md-card-content>
+    <form name="signInForm" (ngSubmit)="signInForm.form.valid && login()" #signInForm="ngForm" novalidate>
+
+      <div class="center" [ngClass]="{ 'has-error': signInForm.submitted && !username.valid }">
+        <md-input-container>
+          <input mdInput
+            placeholder="User name"
+            name="username"
+            [(ngModel)]="model.username"
+            #username="ngModel"
+            required >
+        </md-input-container>
+        <div *ngIf="signInForm.submitted && !username.valid" class="help-block">Username is required</div>
+      </div>
+
+      <div class="center" [ngClass]="{ 'has-error': signInForm.submitted && !password.valid }">
+        <md-input-container>
+          <input mdInput
+            name="password"
+            type="password"
+            placeholder="password"
+            [(ngModel)]="model.password"
+            #password="ngModel"
+            required >
+        </md-input-container>
+        <div *ngIf="signInForm.submitted && !password.valid" class="help-block">Password is required</div>
+      </div>
+
+      <div class="center" style="margin-top: 20px;">
+        <button md-button [disabled]="signInForm.form.invalid" class="btn btn-primary">Login</button>
+        <a md-button [routerLink]="['/sign-up']" >Register</a>
+      </div>
+
+    </form>
+  </md-card-content>
+</md-card>
+
+
