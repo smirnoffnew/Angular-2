@@ -1,30 +1,42 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
-
 import { User } from '../models/User';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
 @Injectable()
 export class UserService {
-  constructor() { }
+  private users:User[];
+  
+  constructor() {
+    this.users = [
+      { email:'smirnoff', password:'asdfasdf', username:'smirnoff'},
+      { email:'igor', password:'asdfasdf',  username:'igor' }
+    ];
+  }
   
   getAll() {
-   
+    return this.users;
   }
   
-  getById(id: number) {
+  create(user:any) {
+    this.users[ this.users.length] = user;
+    console.log('this.users', this.users);
+  }
+  
+  check(email:string, password:string) {
     
+    for (var i = 0, len = this.users.length; i < len; i++) {
+      console.log('email',email);
+      console.log('password', password);
+      console.log('this.users[i].email', this.users[i].email);
+      console.log('this.users[i].password', this.users[i].password);
+      console.log(this.users[i].email == email && this.users[i].password == password);
+      if (this.users[i].email == email && this.users[i].password == password)
+        return true;
+    }
   }
   
-  create(user: User) {
- 
-  }
-  
-  update(user: User) {
-
-  }
-  
-  delete(id: number) {
-  
-  }
+  getById(id: number) {}
+  update(user: User) {}
+  delete(id: number) {}
   
 }

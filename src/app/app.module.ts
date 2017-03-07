@@ -6,12 +6,16 @@ import { MaterialModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { routes } from './all-routs';
 import 'hammerjs';
+
 import { AppComponent } from './app.component';
 import { SignInComponent, SignUpComponent, FeedComponent } from './components.barrel';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { AuthGuard } from './services/auth.guard';
 import { UserComponent } from './user/user.component';
+
+import { AuthenticationService } from './services/authentication.service';
 import { UserService } from './services/user.service';
+import { AuthGuard } from './services/auth.guard';
+import { SignOutComponent } from './sign-out/sign-out.component';
 
 @NgModule({
   imports: [
@@ -27,9 +31,10 @@ import { UserService } from './services/user.service';
     SignInComponent,
     FeedComponent,
     NotFoundComponent,
-    UserComponent
+    UserComponent,
+    SignOutComponent
   ],
-  providers: [ AuthGuard, UserService ],
+  providers: [ AuthGuard, UserService, AuthenticationService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

@@ -1,18 +1,18 @@
 <md-card>
   <md-card-title class="center" >Sign In</md-card-title>
   <md-card-content>
-    <form name="signInForm" (ngSubmit)="signInForm.form.valid && login()" #signInForm="ngForm" novalidate>
+    <form name="signInForm" (ngSubmit)="login(); signInForm.reset();" #signInForm="ngForm">
 
-      <div class="center" [ngClass]="{ 'has-error': signInForm.submitted && !username.valid }">
+      <div class="center" [ngClass]="{ 'has-error': signInForm.submitted && !email.valid }">
         <md-input-container>
           <input mdInput
-            placeholder="User name"
-            name="username"
-            [(ngModel)]="model.username"
-            #username="ngModel"
+            placeholder="email"
+            name="email"
+            [(ngModel)]="model.email"
+            #email="ngModel"
             required >
         </md-input-container>
-        <div *ngIf="signInForm.submitted && !username.valid" class="help-block">Username is required</div>
+        <div *ngIf="signInForm.submitted && !email.valid" class="help-block">email is required</div>
       </div>
 
       <div class="center" [ngClass]="{ 'has-error': signInForm.submitted && !password.valid }">

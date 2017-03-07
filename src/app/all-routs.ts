@@ -1,6 +1,7 @@
 import {
   SignInComponent,
   SignUpComponent,
+  SignOutComponent,
   FeedComponent,
   NotFoundComponent,
   UserComponent
@@ -9,13 +10,14 @@ import {
 import { AuthGuard } from './services/auth.guard';
 
 export const routes = [
-  { path: '',  component: FeedComponent, canActivate: [AuthGuard] },
-  
-  { path:'sign-in',   name: 'SignIn',    component: SignInComponent },
-  { path:'sign-up',   name: 'SignUp',    component: SignUpComponent },
-  { path:'user',      name: 'User',      component: UserComponent,  canActivate: [AuthGuard]},
-  { path: '404',      name: 'NotFound',  component: NotFoundComponent },
+  { path: 'feed',      name: 'Feed',      component: FeedComponent,     canActivate: [AuthGuard] },
+  { path: '',         name: 'Feed',      component: FeedComponent,     canActivate: [AuthGuard] },
+  { path: 'sign-in',   name: 'SignIn',    component: SignInComponent,   canActivate: [AuthGuard] },
+  { path: 'sign-up',   name: 'SignUp',    component: SignUpComponent,   canActivate: [AuthGuard] },
+  { path: 'sign-out',  name: 'SignOut',   component: SignOutComponent,  canActivate: [AuthGuard] },
+  { path: 'user',      name: 'User',      component: UserComponent,     canActivate: [AuthGuard] },
+  { path: '404',       name: 'NotFound',  component: NotFoundComponent, canActivate: [AuthGuard] },
 
   // otherwise redirect to home
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '404' },
 ];
