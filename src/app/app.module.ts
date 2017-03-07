@@ -17,13 +17,18 @@ import { UserService } from './services/user.service';
 import { AuthGuard } from './services/auth.guard';
 import { SignOutComponent } from './sign-out/sign-out.component';
 
+import { RestangularModule } from 'ng2-restangular';
+
 @NgModule({
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes),
     FormsModule,
     HttpModule,
-    MaterialModule
+    MaterialModule,
+    RestangularModule.forRoot((RestangularProvider) => {
+      RestangularProvider.setBaseUrl('http://2muchcoffee.com:53000/api');
+    }),
   ],
   declarations: [
     AppComponent,

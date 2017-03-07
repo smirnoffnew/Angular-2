@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/User';
+import { Restangular } from 'ng2-restangular';
+import 'rxjs/Rx';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
 @Injectable()
 export class UserService {
   private users:User[];
   
-  constructor() {
+  constructor( public restangular: Restangular ) {
     this.users = [
       { email:'smirnoff', password:'asdfasdf', username:'smirnoff'},
       { email:'igor', password:'asdfasdf',  username:'igor' }
@@ -18,8 +20,18 @@ export class UserService {
   }
   
   create(user:any) {
+
     this.users[ this.users.length] = user;
     console.log('this.users', this.users);
+
+    let userObject = {
+      username: user.username,
+      password: user.password,
+      email: user.email
+    };
+    this.restangular.all('/clients').post(userObject).subscribe(res => {
+      console.log(res);
+    });
   }
   
   check(email:string, password:string) {
