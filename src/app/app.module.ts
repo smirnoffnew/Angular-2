@@ -28,6 +28,16 @@ import { RestangularModule } from 'ng2-restangular';
     MaterialModule,
     RestangularModule.forRoot((RestangularProvider) => {
       RestangularProvider.setBaseUrl('http://2muchcoffee.com:53000/api');
+      RestangularProvider.addErrorInterceptor( (response, subject, responseHandler) => {
+        if (response.status) {
+          var errorMsg = response.statusText;
+          if(response.data.error.message) {
+            console.log('err', response.data.error.message);
+          }
+          return false; // error handled
+        }
+        return true; // error not handled
+      });
     }),
   ],
   declarations: [

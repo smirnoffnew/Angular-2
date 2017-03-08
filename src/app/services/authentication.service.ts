@@ -1,19 +1,14 @@
 import { Injectable } from '@angular/core';
-import { UserService } from './user.service';
 
 @Injectable()
 export class AuthenticationService {
 
   private cookieName:string = 'currentUser';
-  constructor(private userService:UserService) {}
+  constructor() {}
 
-  login(email: string, password: string) {
-    if ( this.userService.check(email, password) ) {
-      this.setCookie( this.cookieName, email, {});
-      return true;
-    } else {
-      return false;
-    }
+  login(token: string) {
+    //add token to cookie
+    this.setCookie( this.cookieName, token, {});
   }
 
   logout() {

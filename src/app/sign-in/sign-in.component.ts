@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { UserService } from '../services/user.service';
+import { Router  } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -10,27 +11,25 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class SignInComponent implements OnInit {
 
   model: any = {};
-  constructor( private authenticationService: AuthenticationService, private router: Router) { }
+  userObject: any = {};
+  constructor(
+    private authenticationService: AuthenticationService,
+    private router: Router,
+    private userService: UserService) { }
   
   ngOnInit() {
-    //// reset login status
-    //this.authenticationService.logout();
-    //
-    //// get return url from route parameters or default to '/'
-    //this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.authenticationService.logout();
   }
   
-  login() {
-    console.log('email', this.model.email);
-    console.log('password', this.model.password);
-
-    if ( this.authenticationService.login(this.model.email, this.model.password) ) {
+  signIn() {
+    this.userObject = this.userService.checkUser(this.model.email, this.model.password);
+    console.log('this.userObject ', this.userObject );
+    if ( this.userObject.status ) {
+      this.authenticationService.login(this.userObject.token);
       this.router.navigate(['/feed']);
     }
-
     this.model.email = '';
     this.model.password = '';
-
   }
 
 }

@@ -1,54 +1,104 @@
 import { Injectable } from '@angular/core';
-import { User } from '../models/User';
+import { UserModel } from '../models/UserModel';
+import { TokenModel } from '../models/TokenModel';
 import { Restangular } from 'ng2-restangular';
 import 'rxjs/Rx';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Observable, ReplaySubject } from 'rxjs/Rx';
+import * as _ from 'lodash';
+console.log(_);
 
 @Injectable()
 export class UserService {
-  private users:User[];
-  
-  constructor( public restangular: Restangular ) {
-    this.users = [
-      { email:'smirnoff', password:'asdfasdf', username:'smirnoff'},
-      { email:'igor', password:'asdfasdf',  username:'igor' }
-    ];
-  }
-  
-  getAll() {
-    return this.users;
-  }
-  
-  create(user:any) {
 
-    this.users[ this.users.length] = user;
-    console.log('this.users', this.users);
+  currentUser$ = new ReplaySubject();
+  currentToken$ = new ReplaySubject();
 
-    let userObject = {
-      username: user.username,
-      password: user.password,
-      email: user.email
-    };
-    this.restangular.all('/clients').post(userObject).subscribe(res => {
-      console.log(res);
+  constructor(public restangular:Restangular) {
+  }
+
+  create(dataForCreateUser) {
+    return this.restangular.all('clients').post(dataForCreateUser)
+    .switchMap(data => {
+      this.currentUser$.next(new UserModel(data));
+      
+      //идем на новый урл для получения токена, ID подставляеться по умолчанию
+      return data.all('accessTokens').getList()
+    })
+
+    //фильтруем самый новый токен
+    .map(tokens => {
+      return _.maxBy(tokens, 'created');
+    })
+
+    //не попадем в подписку если запрос обрветься и серевер не вернет ошибку
+    .filter(token => token)
+
+    //создаем четкую модель токена без методов рест ангуляра
+    .map(token => new TokenModel(token))
+
+    //для подписки на свойство класса
+    .map(token => {
+      this.currentToken$.next(token);
+      return token;
     });
-  }
-  
-  check(email:string, password:string) {
     
-    for (var i = 0, len = this.users.length; i < len; i++) {
-      console.log('email',email);
-      console.log('password', password);
-      console.log('this.users[i].email', this.users[i].email);
-      console.log('this.users[i].password', this.users[i].password);
-      console.log(this.users[i].email == email && this.users[i].password == password);
-      if (this.users[i].email == email && this.users[i].password == password)
-        return true;
-    }
   }
-  
-  getById(id: number) {}
-  update(user: User) {}
-  delete(id: number) {}
-  
+
+
+  private getToken(id:string):any {
+    this.restangular.one('/clients/' + id + '/accessTokens').get().subscribe(
+      (data) => {
+        return data[0].id;
+      },
+      (error) => {
+        console.log('error', error.data.error.message);
+        return '';
+      }
+    );
+  }
+
+  checkUser(email:string, password:string) {
+    this.restangular.all('/clients/login').post({email: email, password: password}).subscribe(
+      (data) => {
+        return {
+          status: UserService.isEmptyObject(this.getUserByToken(data.id)),
+          user: this.getUserByToken(data.id),
+          token: data.id
+        }
+      },
+      (error) => {
+        console.log('error', error.data.error.message);
+        return {
+          status: false,
+          user: {},
+          token: ''
+        }
+      });
+  }
+
+  private getUserByToken(token:string) {
+    this.restangular.one('/tokens/' + token + '/user').get().subscribe(
+      (data) => {
+        return {
+          email: data.email,
+          username: data.username,
+          id: data.id
+        };
+      },
+      (error) => {
+        console.log('error', error.data.error.message);
+        return {};
+      }
+    );
+  }
+
+  static isEmptyObject(obj) {
+    for (var i in obj) {
+      if (obj.hasOwnProperty(i)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
 }
