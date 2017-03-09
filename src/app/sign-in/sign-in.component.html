@@ -29,11 +29,15 @@
       </div>
 
       <div class="center" style="margin-top: 20px;">
-        <button md-button [disabled]="signInForm.form.invalid" class="btn btn-primary">Login</button>
+        <button md-button [disabled]="signInForm.form.invalid">Login</button>
         <a md-button [routerLink]="['/sign-up']" >Register</a>
       </div>
-
     </form>
+
+    <div class="center" style="margin-top: 20px;">
+      <button md-button (click)="authenticateGoogle()">Google+</button>
+      <button md-button (click)="authenticateFaceBook()">FaceBook</button>
+    </div>
   </md-card-content>
 </md-card>
 

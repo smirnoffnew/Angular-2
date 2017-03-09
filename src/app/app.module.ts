@@ -8,24 +8,32 @@ import { routes } from './all-routs';
 import 'hammerjs';
 
 import { AppComponent } from './app.component';
-import { SignInComponent, SignUpComponent, FeedComponent } from './components.barrel';
+import { SignInComponent, SignUpComponent, SignOutComponent, FeedComponent} from './components.barrel';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserComponent } from './user/user.component';
 
 import { TokenService } from './services/token.service';
 import { UserService } from './services/user.service';
 import { AuthGuard } from './services/auth.guard';
-import { SignOutComponent } from './sign-out/sign-out.component';
-
+import { AlertService } from './services/alert.service';
+import { Ng2UiAuthModule, CustomConfig} from 'ng2-ui-auth';
 import { RestangularModule } from 'ng2-restangular';
+import { AlertComponent } from './alert/alert.component';
+
+export const GOOGLE_CLIENT_ID = '******************************.apps.googleusercontent.com';
+export class MyAuthConfig extends CustomConfig {
+  defaultHeaders = {'Content-Type': 'application/json'};
+  providers = {google: {clientId: GOOGLE_CLIENT_ID}};
+}
 
 @NgModule({
   imports: [
+    MaterialModule,
     BrowserModule,
     RouterModule.forRoot(routes),
     FormsModule,
     HttpModule,
-    MaterialModule,
+    Ng2UiAuthModule.forRoot(MyAuthConfig),
     RestangularModule.forRoot((RestangularProvider) => {
       RestangularProvider.setBaseUrl('http://2muchcoffee.com:53000/api');
       //RestangularProvider.addErrorInterceptor( (response, subject, responseHandler) => {
@@ -38,6 +46,7 @@ import { RestangularModule } from 'ng2-restangular';
       //  }
       //  return true; // error not handled
       //});
+
     }),
   ],
   declarations: [
@@ -47,9 +56,10 @@ import { RestangularModule } from 'ng2-restangular';
     FeedComponent,
     NotFoundComponent,
     UserComponent,
-    SignOutComponent
+    SignOutComponent,
+    AlertComponent,
   ],
-  providers: [ AuthGuard, UserService, TokenService ],
+  providers: [ AuthGuard, UserService, TokenService, AlertService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

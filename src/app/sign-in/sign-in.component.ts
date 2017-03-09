@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TokenService } from '../services/token.service';
 import { UserService } from '../services/user.service';
 import { Router  } from '@angular/router';
+import {AuthService} from 'ng2-ui-auth';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -13,9 +15,11 @@ export class SignInComponent implements OnInit {
   model: any = {};
 
   constructor(
+    private alertService:AlertService,
     private tokenService: TokenService,
     private router: Router,
-    private userService: UserService) { }
+    private userService: UserService,
+    private auth: AuthService) { }
   
   ngOnInit() {}
   
@@ -27,11 +31,25 @@ export class SignInComponent implements OnInit {
         console.log('SignInComponent currentTokenLogin$', data);
       },
       (error) => {
+        this.alertService.error(error.data.error.message);
         console.log('SignInComponent currentTokenLogin$', error.data.error.message);
         this.model.email = '';
         this.model.password = '';
       }
     );
+  }
+
+  authenticateGoogle(){
+    console.log('authenticateGoogle');
+    this.auth.authenticate('google')
+    .subscribe({
+      error: (err: any) => {console.log(err);},
+      complete: () => {this.router.navigateByUrl('feed');}
+    });
+  }
+
+  authenticateFaceBook() {
+    console.log('authenticateFaceBook');
   }
 
 }
