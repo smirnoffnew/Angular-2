@@ -20,7 +20,7 @@ export class SignUpComponent implements OnInit{
 
   ngOnInit() { }
 
-    register() {
+    register(signUpForm) {
 
       let dataForCreateUser = {
         email:this.model.email,
@@ -37,6 +37,9 @@ export class SignUpComponent implements OnInit{
             console.log('SignUpComponent currentUser$', data);
           },
           (error) => {
+            signUpForm._submitted = false;
+            this.model.password = '';
+            this.alertService.error(error.data.error.message);
             console.log('SignUpComponent currentUser$', error.data.error.message);
           }
       );
@@ -49,6 +52,8 @@ export class SignUpComponent implements OnInit{
             console.log('SignUpComponent currentToken$', data);
           },
           (error) => {
+            signUpForm._submitted = false;
+            this.model.password = '';
             this.alertService.error(error.data.error.message);
             console.log('SignUpComponent currentToken$', error.data.error.message);
           }

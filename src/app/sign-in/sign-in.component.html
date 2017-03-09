@@ -1,7 +1,7 @@
 <md-card>
   <md-card-title class="center" >Sign In</md-card-title>
   <md-card-content>
-    <form name="signInForm" (ngSubmit)="signIn(); signInForm.reset();" #signInForm="ngForm">
+    <form name="signInForm" (ngSubmit)="signIn(signInForm);" #signInForm="ngForm">
 
       <div class="center" [ngClass]="{ 'has-error': signInForm.submitted && !email.valid }">
         <md-input-container>

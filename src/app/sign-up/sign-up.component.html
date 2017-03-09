@@ -1,7 +1,7 @@
 <md-card>
   <md-card-title class="center" >Registration</md-card-title>
   <md-card-content>
-    <form name="form" (ngSubmit)="signUpForm.form.valid && register()" #signUpForm="ngForm" novalidate>
+    <form name="form" (ngSubmit)="signUpForm.form.valid && register(signUpForm)" #signUpForm="ngForm" novalidate>
 
       <div class="center" [ngClass]="{ 'has-error': signUpForm.submitted && !email.valid }">
         <md-input-container>

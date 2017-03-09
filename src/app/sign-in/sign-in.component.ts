@@ -13,6 +13,7 @@ import { AlertService } from '../services/alert.service';
 export class SignInComponent implements OnInit {
 
   model: any = {};
+  signInForm:any;
 
   constructor(
     private alertService:AlertService,
@@ -23,7 +24,7 @@ export class SignInComponent implements OnInit {
   
   ngOnInit() {}
   
-  signIn() {
+  signIn(signInForm) {
     this.userService.authenticateUser(this.model.email, this.model.password).subscribe(
       (data:any) => {
         this.tokenService.set(data.id);
@@ -33,8 +34,10 @@ export class SignInComponent implements OnInit {
       (error) => {
         this.alertService.error(error.data.error.message);
         console.log('SignInComponent currentTokenLogin$', error.data.error.message);
-        this.model.email = '';
+        console.log('signInForm', signInForm);
+        signInForm._submitted = false;
         this.model.password = '';
+        console.log('this.signInForm', this.signInForm);
       }
     );
   }
