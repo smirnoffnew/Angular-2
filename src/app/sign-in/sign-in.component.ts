@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../services/authentication.service';
+import { TokenService } from '../services/token.service';
 import { UserService } from '../services/user.service';
 import { Router  } from '@angular/router';
 
@@ -11,25 +11,27 @@ import { Router  } from '@angular/router';
 export class SignInComponent implements OnInit {
 
   model: any = {};
-  userObject: any = {};
+
   constructor(
-    private authenticationService: AuthenticationService,
+    private tokenService: TokenService,
     private router: Router,
     private userService: UserService) { }
   
-  ngOnInit() {
-    this.authenticationService.logout();
-  }
+  ngOnInit() {}
   
   signIn() {
-    this.userObject = this.userService.checkUser(this.model.email, this.model.password);
-    console.log('this.userObject ', this.userObject );
-    if ( this.userObject.status ) {
-      this.authenticationService.login(this.userObject.token);
-      this.router.navigate(['/feed']);
-    }
-    this.model.email = '';
-    this.model.password = '';
+    this.userService.authenticateUser(this.model.email, this.model.password).subscribe(
+      (data:any) => {
+        this.tokenService.set(data.id);
+        this.router.navigate(['/feed']);
+        console.log('SignInComponent currentTokenLogin$', data);
+      },
+      (error) => {
+        console.log('SignInComponent currentTokenLogin$', error.data.error.message);
+        this.model.email = '';
+        this.model.password = '';
+      }
+    );
   }
 
 }
