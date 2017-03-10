@@ -20,10 +20,11 @@ import { Ng2UiAuthModule, CustomConfig} from 'ng2-ui-auth';
 import { RestangularModule } from 'ng2-restangular';
 import { AlertComponent } from './alert/alert.component';
 
-export const GOOGLE_CLIENT_ID = '******************************.apps.googleusercontent.com';
+export const GOOGLE_CLIENT_ID = '945919728141-s8e4e961ie6jgi5hbuuvedv7vo1u40n5.apps.googleusercontent.com';
 export class MyAuthConfig extends CustomConfig {
   defaultHeaders = {'Content-Type': 'application/json'};
-  providers = {google: {clientId: GOOGLE_CLIENT_ID}};
+  providers = {google: {clientId: GOOGLE_CLIENT_ID, url: '/clients/auth-google'}};
+  baseUrl = 'http://2muchcoffee.com:53000/api/';
 }
 
 @NgModule({

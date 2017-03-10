@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenService } from '../services/token.service';
+import { TokenModel } from '../models/TokenModel';
 import { UserService } from '../services/user.service';
 import { Router  } from '@angular/router';
-import {AuthService} from 'ng2-ui-auth';
+import { AuthService } from 'ng2-ui-auth';
 import { AlertService } from '../services/alert.service';
 
 @Component({
@@ -29,27 +30,31 @@ export class SignInComponent implements OnInit {
       (data:any) => {
         this.tokenService.set(data.id);
         this.router.navigate(['/feed']);
-        console.log('SignInComponent currentTokenLogin$', data);
       },
       (error) => {
         this.alertService.error(error.data.error.message);
-        console.log('SignInComponent currentTokenLogin$', error.data.error.message);
-        console.log('signInForm', signInForm);
         signInForm._submitted = false;
         this.model.password = '';
-        console.log('this.signInForm', this.signInForm);
       }
     );
   }
 
-  authenticateGoogle(){
-    console.log('authenticateGoogle');
+  authenticateGoogle() {
     this.auth.authenticate('google')
-    .subscribe({
-      error: (err: any) => {console.log(err);},
-      complete: () => {this.router.navigateByUrl('feed');}
-    });
+    .subscribe(
+      (data) => {
+        let response = data.json();
+        let token = new TokenModel(response.data);
+        this.tokenService.set(token.id);
+        this.router.navigate(['/feed']);
+        this.alertService.success('Google Authorization successful', true);
+      },
+      (error) => {
+        this.alertService.error(error.data.error.message);
+      }
+    );
   }
+
 
   authenticateFaceBook() {
     console.log('authenticateFaceBook');
