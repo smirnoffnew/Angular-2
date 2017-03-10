@@ -21,9 +21,13 @@ import { RestangularModule } from 'ng2-restangular';
 import { AlertComponent } from './alert/alert.component';
 
 export const GOOGLE_CLIENT_ID = '945919728141-s8e4e961ie6jgi5hbuuvedv7vo1u40n5.apps.googleusercontent.com';
+export const FACEBOOK_CLIENT_ID = '656768837864102';  //656768837864102
 export class MyAuthConfig extends CustomConfig {
   defaultHeaders = {'Content-Type': 'application/json'};
-  providers = {google: {clientId: GOOGLE_CLIENT_ID, url: '/clients/auth-google'}};
+  providers = {
+    google: {clientId: GOOGLE_CLIENT_ID, url: '/clients/auth-google'},
+    facebook: {clientId: FACEBOOK_CLIENT_ID, url: '/clients/auth-facebook'}
+  };
   baseUrl = 'http://2muchcoffee.com:53000/api/';
 }
 

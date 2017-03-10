@@ -28,4 +28,8 @@ export class TokenService {
   delete() {
     Cookie.delete(this.currentUser);
   }
+  
+  isAuthorized(){
+    return !Cookie.get(this.currentUser) === null;
+  }
 }

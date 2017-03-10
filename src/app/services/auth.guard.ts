@@ -9,29 +9,29 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     
-    //сами идем на логин незарегестрированные
-    if ( !this.tokenService.get() && (state.url=='/sign-in' || state.url=='/sign-up') ) {
+    //'sign-in sign-up' redirect for status: "Not authorized"
+    if ( !this.tokenService.isAuthorized() && (state.url=='/sign-in' || state.url=='/sign-up') ) {
       return true;
     }
 
-    //залогиненые идем на логин перебрасываем на feed
-    if ( this.tokenService.get() && (state.url=='/sign-in' || state.url=='/sign-up') ) {
+    //'sign-in sign-up' redirect for status: "Authorized"
+    if ( this.tokenService.isAuthorized() && (state.url=='/sign-in' || state.url=='/sign-up') ) {
       this.router.navigate(['/feed']);
       return false;
     }
 
-    //залогиненые на логаут
-    if ( this.tokenService.get() && state.url=='/sign-out') {
+    //'sign-in sign-out' redirect for status: "Authorized"
+    if ( this.tokenService.isAuthorized() && state.url=='/sign-out') {
       this.tokenService.delete();
       this.router.navigate(['/sign-in']);
       return true;
     }
 
-    if ( this.tokenService.get() ) {
-      //залогиненные идем на скрытый урл
+    if ( this.tokenService.isAuthorized() ) {
+      //redirect for all Authorized urls status: "Authorized"
       return true;
     } else {
-      // не залогиненых всегда кидаем на логин
+      //redirect for all Authorized urls status: "Not authorized"
       this.router.navigate(['/sign-in']);
       return false;
     }

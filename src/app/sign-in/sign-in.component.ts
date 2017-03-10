@@ -58,6 +58,19 @@ export class SignInComponent implements OnInit {
 
   authenticateFaceBook() {
     console.log('authenticateFaceBook');
+    this.auth.authenticate('facebook')
+    .subscribe(
+      (data) => {
+        let response = data.json();
+        let token = new TokenModel(response.data);
+        this.tokenService.set(token.id);
+        this.router.navigate(['/feed']);
+        this.alertService.success('Facebook Authorization successful', true);
+      },
+      (error) => {
+        this.alertService.error(error.data.error.message);
+      }
+    );
   }
 
 }
