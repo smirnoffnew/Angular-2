@@ -11,6 +11,7 @@ import { AlertService } from '../services/alert.service';
 })
 export class SignUpComponent implements OnInit{
   model: any = {};
+  signUpForm :any = {};
 
   constructor(
     private alertService: AlertService,
@@ -18,45 +19,46 @@ export class SignUpComponent implements OnInit{
     private userService: UserService,
     private tokenService: TokenService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+
+  }
 
     register(signUpForm) {
-
       let dataForCreateUser = {
         email:this.model.email,
         username:this.model.username,
         password: this.model.password
       };
-
+  
+      this.signUpForm = signUpForm;
       this.userService.createUser(dataForCreateUser).subscribe();
 
       this.userService.currentUser$
-        .subscribe(
-          (data) => {
-            this.alertService.success('Registration successful', true);
-            console.log('SignUpComponent currentUser$', data);
-          },
-          (error) => {
-            signUpForm._submitted = false;
-            this.model.password = '';
-            this.alertService.error(error.data.error.message);
-            console.log('SignUpComponent currentUser$', error.data.error.message);
-          }
+      .subscribe(
+        (data) => {
+          console.log('currentUser$ data', data);
+          this.alertService.success('Registration successful', true);
+          this.userService.saveCurrentUser(data);
+        },
+        (error) => {
+          this.signUpForm._submitted = false;
+          this.model.password = '';
+          this.alertService.error(error.data.error.message);
+        }
       );
 
       this.userService.currentToken$
-        .subscribe(
-          (data:any) => {
-            this.tokenService.set(data.id);
-            this.router.navigate(['/feed']);
-            console.log('SignUpComponent currentToken$', data);
-          },
-          (error) => {
-            signUpForm._submitted = false;
-            this.model.password = '';
-            this.alertService.error(error.data.error.message);
-            console.log('SignUpComponent currentToken$', error.data.error.message);
-          }
+      .subscribe(
+        (data:any) => {
+          console.log('currentToken$ data', data);
+          this.tokenService.set(data.id);
+          this.router.navigate(['/feed']);
+        },
+        (error) => {
+          this.signUpForm._submitted = false;
+          this.model.password = '';
+          this.alertService.error(error.data.error.message);
+        }
       );
     }
 }

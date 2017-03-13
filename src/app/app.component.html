@@ -1,2 +1,11 @@
+<md-toolbar color="primary">
+  <div *ngIf="navbarFlag">
+    <a class="navbarLink" [routerLink]="['/sign-out']" routerLinkActive="active">Logout</a>
+    <a class="navbarLink" [routerLink]="['/user']" routerLinkActive="active">User</a>
+    <a class="navbarLink" [routerLink]="['/profile']" routerLinkActive="active">Profile</a>
+    <a class="navbarLink" [routerLink]="['/feed']" routerLinkActive="active">Feed</a>
+  </div>
+</md-toolbar>
+
 <alert></alert>
 <router-outlet></router-outlet>

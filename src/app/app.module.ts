@@ -8,7 +8,7 @@ import { routes } from './all-routs';
 import 'hammerjs';
 
 import { AppComponent } from './app.component';
-import { SignInComponent, SignUpComponent, SignOutComponent, FeedComponent} from './components.barrel';
+import { SignInComponent, SignUpComponent, SignOutComponent, FeedComponent, ProfileComponent} from './components.barrel';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserComponent } from './user/user.component';
 
@@ -19,9 +19,14 @@ import { AlertService } from './services/alert.service';
 import { Ng2UiAuthModule, CustomConfig} from 'ng2-ui-auth';
 import { RestangularModule } from 'ng2-restangular';
 import { AlertComponent } from './alert/alert.component';
+import { ProfileService } from './services/profile.service';
+
+//resolvers
+import { ProfileResolverService } from './resolvers/profile.resolver.service';
+import { FeedResolverService } from './resolvers/feed.resolver.service';
 
 export const GOOGLE_CLIENT_ID = '945919728141-s8e4e961ie6jgi5hbuuvedv7vo1u40n5.apps.googleusercontent.com';
-export const FACEBOOK_CLIENT_ID = '656768837864102';  //656768837864102
+export const FACEBOOK_CLIENT_ID = '656768837864102';
 export class MyAuthConfig extends CustomConfig {
   defaultHeaders = {'Content-Type': 'application/json'};
   providers = {
@@ -51,6 +56,14 @@ export class MyAuthConfig extends CustomConfig {
       //  }
       //  return true; // error not handled
       //});
+      RestangularProvider.addFullRequestInterceptor((element, operation, path, url, headers, params)=> {
+        let tokenService = new TokenService;
+        return {
+          params: Object.assign({}, params, {access_token: tokenService.get()}),
+          headers: headers,
+          element: element
+        }
+      });
 
     }),
   ],
@@ -63,8 +76,16 @@ export class MyAuthConfig extends CustomConfig {
     UserComponent,
     SignOutComponent,
     AlertComponent,
+    ProfileComponent,
   ],
-  providers: [ AuthGuard, UserService, TokenService, AlertService ],
+  providers: [ 
+    AuthGuard, 
+    UserService, 
+    TokenService, 
+    AlertService, 
+    ProfileService,
+    ProfileResolverService,
+    FeedResolverService],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

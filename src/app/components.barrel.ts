@@ -4,3 +4,4 @@ export * from './sign-out/sign-out.component';
 export * from './feed/feed.component';
 export * from './not-found/not-found.component';
 export * from './user/user.component';
+export * from './profile/profile.component';

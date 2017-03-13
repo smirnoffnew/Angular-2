@@ -3,3 +3,18 @@
 .center {
     text-align: center;
 }
+
+.colorWhite {
+    color: #fff;
+}
+
+.navbarLink {
+    margin-left: 20px;
+    color: #fff;
+
+}
+
+.active {
+    color:mediumvioletred;
+    cursor: default;
+}

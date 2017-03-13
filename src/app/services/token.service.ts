@@ -30,6 +30,7 @@ export class TokenService {
   }
   
   isAuthorized(){
-    return !Cookie.get(this.currentUser) === null;
+    return Cookie.get(this.currentUser) !== null;
   }
 }
+
