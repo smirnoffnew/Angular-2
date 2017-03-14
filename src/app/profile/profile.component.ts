@@ -41,32 +41,32 @@ export class ProfileComponent implements OnInit {
   
   saveProfile(){
 
-    let user = this.userService.getSavedCurrentUser();
 
-    let data = new ProfileModel({
-      birthday: this.profile.date_of_birth,
-      fullname: this.profile.full_name,
-      phone: this.profile.phone_number,
-      height: +this.profile.height,
-      weight: +this.profile.weight,
-      snickersBrand: this.profile.favorite_sneakers_brand,
-      image: '',
-      id: '',
-      clientId: user.id
-    });
-    
-    console.log('data', data);
 
-    this.profileService.set(data)
-    .subscribe(
-      (data) => {
-        console.log('currentProfile$ data', data);
-      },
-      (error) => {
-        let res = error.json();
-        this.alertService.error(res.error.message);
-      }
-    );
+    //let data = new ProfileModel({
+    //  birthday: this.profile.date_of_birth,
+    //  fullname: this.profile.full_name,
+    //  phone: this.profile.phone_number,
+    //  height: +this.profile.height,
+    //  weight: +this.profile.weight,
+    //  snickersBrand: this.profile.favorite_sneakers_brand,
+    //  image: '',
+    //  id: '',
+    //  clientId: user.id
+    //});
+    //
+    //console.log('data', data);
+    //
+    //this.profileService.set(data)
+    //.subscribe(
+    //  (data) => {
+    //    console.log('currentProfile$ data', data);
+    //  },
+    //  (error) => {
+    //    let res = error.json();
+    //    this.alertService.error(res.error.message);
+    //  }
+    //);
 
     
   }

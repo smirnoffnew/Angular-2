@@ -4,6 +4,7 @@ import { TokenModel } from '../models/TokenModel';
 import { UserService } from '../services/user.service';
 import { Router  } from '@angular/router';
 import { AlertService } from '../services/alert.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -19,28 +20,14 @@ export class SignInComponent implements OnInit {
     private alertService:AlertService,
     private tokenService: TokenService,
     private router: Router,
-    private userService: UserService ) { }
+    private userService: UserService,
+    private authService:AuthService) { }
   
   ngOnInit() {}
   
   signIn(signInForm) {
-    this.signInForm = signInForm;
+
     this.userService.authenticateUser(this.model.email, this.model.password).subscribe();
-  
-    this.userService.currentUser$
-    .subscribe(
-      (data) => {
-        console.log('currentUser$ data', data);
-        this.alertService.success('Authentication successful', true);
-        this.userService.saveCurrentUser(data);
-      },
-      (error) => {
-        this.signInForm._submitted = false;
-        this.model.password = '';
-        this.alertService.error(error.data.error.message);
-      }
-    );
-  
     this.userService.currentToken$
     .subscribe(
       (data:any) => {
@@ -76,29 +63,29 @@ export class SignInComponent implements OnInit {
 
     this.userService.authenticateGoogle().subscribe();
 
-    this.userService.currentUser$
-    .subscribe(
-      (data) => {
-        console.log('currentUser$ data', data);
-        this.alertService.success('Authentication successful', true);
-        this.userService.saveCurrentUser(data);
-      },
-      (error) => {
-        this.alertService.error(error.data.error.message);
-      }
-    );
-
-    this.userService.currentToken$
-    .subscribe(
-      (data:any) => {
-        console.log('currentToken$ data', data);
-        this.tokenService.set(data.id);
-        this.router.navigate(['/feed']);
-      },
-      (error) => {
-        this.alertService.error(error.data.error.message);
-      }
-    );
+    //this.userService.currentUser$
+    //.subscribe(
+    //  (data) => {
+    //    console.log('currentUser$ data', data);
+    //    this.alertService.success('Authentication successful', true);
+    //    this.userService.saveCurrentUser(data);
+    //  },
+    //  (error) => {
+    //    this.alertService.error(error.data.error.message);
+    //  }
+    //);
+    //
+    //this.userService.currentToken$
+    //.subscribe(
+    //  (data:any) => {
+    //    console.log('currentToken$ data', data);
+    //    this.tokenService.set(data.id);
+    //    this.router.navigate(['/feed']);
+    //  },
+    //  (error) => {
+    //    this.alertService.error(error.data.error.message);
+    //  }
+    //);
   }
 
 

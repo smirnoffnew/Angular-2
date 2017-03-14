@@ -11,26 +11,16 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class UserService {
-  currentUser:any = {};
-  currentUser$ = new ReplaySubject();
-  currentToken$ = new ReplaySubject();
-  currentProfile$ = new ReplaySubject();
-
+  public currentUser$;
+  public currentToken$;
+  
   constructor(private restangular:Restangular,
               private tokenService:TokenService,
               private socialNetworkService:AuthService,
-              private alertService:AlertService) {
-    this.restangular.one('tokens', this.tokenService.get()).one('user').get()
-    .subscribe(
-      (data) => {
-        this.currentUser = data;
-        console.log('usr from constructor', data);
-      },
-      (error) => {
-        this.alertService.error(error.data.error.message);
-      }
-    );
-
+              private alertService:AlertService) 
+  {
+    this.currentUser$ = new ReplaySubject();
+    this.currentToken$ = new ReplaySubject();
   }
   
   createUser(dataForCreateUser) {
@@ -90,43 +80,32 @@ export class UserService {
     });
   }
 
-  saveCurrentUser(user){
-    this.currentUser = user;
-  }
   
-  getSavedCurrentUser(){
-    return this.currentUser;
-  }
-
-  getCurrentUser() {
-    return this.restangular.one('tokens', this.tokenService.get()).one('user').get();
-  }
-
-  getUserProfile() {
-    if ( UserService.isEmptyObject(this.currentUser) ) {
-      return this.restangular.one('tokens', this.tokenService.get()).one('user').get()
-      .switchMap(data => {
-        this.currentUser$.next(new UserModel(data));
-        return this.restangular.one('clients', data.username).one('get-profile').get();
-      })
-      .catch((err) => {
-        return Observable.throw(err);
-      })
-      .map(profile => {
-        return profile;
-      });
-    } else {
-      return this.restangular.one('clients', this.currentUser.username).one('get-profile').get();
-    }
-  }
-
-  static isEmptyObject(obj) {
-    for (var i in obj) {
-      if (obj.hasOwnProperty(i)) {
-        return false;
-      }
-    }
-    return true;
-  }
+  //getUserProfile() {
+  //  if ( UserService.isEmptyObject(this.currentUser) ) {
+  //    return this.restangular.one('tokens', this.tokenService.get()).one('user').get()
+  //    .switchMap(data => {
+  //      this.currentUser$.next(new UserModel(data));
+  //      return this.restangular.one('clients', data.username).one('get-profile').get();
+  //    })
+  //    .catch((err) => {
+  //      return Observable.throw(err);
+  //    })
+  //    .map(profile => {
+  //      return profile;
+  //    });
+  //  } else {
+  //    return this.restangular.one('clients', this.currentUser.username).one('get-profile').get();
+  //  }
+  //}
+  //
+  //static isEmptyObject(obj) {
+  //  for (var i in obj) {
+  //    if (obj.hasOwnProperty(i)) {
+  //      return false;
+  //    }
+  //  }
+  //  return true;
+  //}
 
 }

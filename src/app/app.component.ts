@@ -12,7 +12,7 @@ export class AppComponent {
   constructor(private tokenService:TokenService, router: Router) {
     router.events.subscribe( (url:any) => {
       //console.log('url', url);
-      this.navbarFlag = this.tokenService.isAuthorized();
+      this.navbarFlag = this.tokenService.isTokenExist();
     });
   }
   title = 'app works!';

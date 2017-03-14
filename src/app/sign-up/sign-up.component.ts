@@ -30,35 +30,35 @@ export class SignUpComponent implements OnInit{
         password: this.model.password
       };
   
-      this.signUpForm = signUpForm;
-      this.userService.createUser(dataForCreateUser).subscribe();
-
-      this.userService.currentUser$
-      .subscribe(
-        (data) => {
-          console.log('currentUser$ data', data);
-          this.alertService.success('Registration successful', true);
-          this.userService.saveCurrentUser(data);
-        },
-        (error) => {
-          this.signUpForm._submitted = false;
-          this.model.password = '';
-          this.alertService.error(error.data.error.message);
-        }
-      );
-
-      this.userService.currentToken$
-      .subscribe(
-        (data:any) => {
-          console.log('currentToken$ data', data);
-          this.tokenService.set(data.id);
-          this.router.navigate(['/feed']);
-        },
-        (error) => {
-          this.signUpForm._submitted = false;
-          this.model.password = '';
-          this.alertService.error(error.data.error.message);
-        }
-      );
+      //this.signUpForm = signUpForm;
+      //this.userService.createUser(dataForCreateUser).subscribe();
+      //
+      //this.userService.currentUser$
+      //.subscribe(
+      //  (data) => {
+      //    console.log('currentUser$ data', data);
+      //    this.alertService.success('Registration successful', true);
+      //    this.userService.saveCurrentUser(data);
+      //  },
+      //  (error) => {
+      //    this.signUpForm._submitted = false;
+      //    this.model.password = '';
+      //    this.alertService.error(error.data.error.message);
+      //  }
+      //);
+      //
+      //this.userService.currentToken$
+      //.subscribe(
+      //  (data:any) => {
+      //    console.log('currentToken$ data', data);
+      //    this.tokenService.set(data.id);
+      //    this.router.navigate(['/feed']);
+      //  },
+      //  (error) => {
+      //    this.signUpForm._submitted = false;
+      //    this.model.password = '';
+      //    this.alertService.error(error.data.error.message);
+      //  }
+      //);
     }
 }

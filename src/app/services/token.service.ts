@@ -29,7 +29,7 @@ export class TokenService {
     Cookie.delete(this.currentUser);
   }
   
-  isAuthorized(){
+  isTokenExist(){
     return Cookie.get(this.currentUser) !== null;
   }
 }

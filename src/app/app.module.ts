@@ -20,6 +20,8 @@ import { Ng2UiAuthModule, CustomConfig} from 'ng2-ui-auth';
 import { RestangularModule } from 'ng2-restangular';
 import { AlertComponent } from './alert/alert.component';
 import { ProfileService } from './services/profile.service';
+import { AuthService } from './services/auth.service';
+
 
 //resolvers
 import { ProfileResolverService } from './resolvers/profile.resolver.service';
@@ -85,7 +87,8 @@ export class MyAuthConfig extends CustomConfig {
     AlertService, 
     ProfileService,
     ProfileResolverService,
-    FeedResolverService],
+    FeedResolverService,
+    AuthService],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
