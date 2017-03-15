@@ -60,11 +60,11 @@ export class MyAuthConfig extends CustomConfig {
       //});
       RestangularProvider.addFullRequestInterceptor((element, operation, path, url, headers, params)=> {
         let tokenService = new TokenService;
-        return {
-          params: Object.assign({}, params, {access_token: tokenService.get()}),
-          headers: headers,
-          element: element
-        }
+          return {
+            params: Object.assign({}, params, tokenService.isTokenExist() ? {access_token: tokenService.get()} : {}),
+            headers: headers,
+            element: element
+          }
       });
 
     }),

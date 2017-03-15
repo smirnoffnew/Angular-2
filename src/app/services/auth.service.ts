@@ -24,19 +24,15 @@ export class AuthService {
               private userService:UserService,
               private router:Router) {
     this.currentUser = {};
-    this.token = this.tokenService.get();
     this.currentUser$ = new ReplaySubject();
   }
 
 
-  isLoggedIn():Observable<boolean> { 
-    //let returnedObservable$ = this.tokenService.isTokenExist() ? this.restangular.one('tokens', this.token).one('user').get() : Observable.of(false)
-
-    //console.log( 'this.tokenService.isTokenExist()', this.tokenService.isTokenExist());
+  isLoggedIn():Observable<boolean> {
     let returnedObservable$ = Observable.of( this.tokenService.isTokenExist() )
     .switchMap(data => {
-      if ( data ) { 
-        return this.restangular.one('tokens', this.token).one('user').get()
+      if ( data ) {
+        return this.restangular.one('tokens', this.tokenService.get()).one('user').get()
       } else {
         return Observable.of(false);
       }
@@ -56,25 +52,40 @@ export class AuthService {
     return returnedObservable$;
   }
   
-  //Logging(email:string, pasword:string) {
-  //  this.userService.authenticateUser(email, pasword).subscribe();
-  //  this.userService.currentToken$.subscribe(
-  //    ( token ) => {
-  //      //console.log('token token token token', token);
-  //      this.alertService.success('Authentication successful', true);
-  //      this.tokenService.set(token.id);
-  //      this.router.navigate(['/feed']);
-  //    },
-  //    ( error ) => {
-  //      this.alertService.error(error.data.error.message);
-  //    }
-  //  )
-  //}
+  Logging(email:string, pasword:string) {
+    this.userService.authenticateUser(email, pasword).subscribe(
+      () => {
+        this.alertService.success('Authentication successful', true);
+        this.router.navigate(['/feed']);
+      },
+      (error) => {
+        this.alertService.error(error.data.error.message);
+      }
+    );
+  }
   
-  //Registration(email:string, pasword:string) {
-  //  this.userService.authenticateUser(email, pasword);
-  //  this.userService.currentToken$.subscribe(
-  //    (token)=> { this.tokenService.set(token.id) }
-  //  )
-  //}
+  Registration(dataForCreateUser) {
+    this.userService.createUser( dataForCreateUser ).subscribe(
+      () => {
+        this.alertService.success('Registration successful', true);
+        this.router.navigate(['/feed']);
+      },
+      (error) => {
+        this.alertService.error(error.data.error.message);
+      }
+    );
+  }
+  
+  SocialNetworkAuth(socialNetwork:string) {
+    this.userService.socialNetworkAuthenticateUser(socialNetwork)
+    .subscribe(
+      () => {
+        this.alertService.success('Google Authorization successful', true);
+        this.router.navigate(['/feed']);
+      },
+      (error) => {
+        this.alertService.error(error.data.error.message);
+      }
+    );
+  }
 }

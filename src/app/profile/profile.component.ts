@@ -40,9 +40,7 @@ export class ProfileComponent implements OnInit {
   }
   
   saveProfile(){
-
-
-
+    
     //let data = new ProfileModel({
     //  birthday: this.profile.date_of_birth,
     //  fullname: this.profile.full_name,

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { TokenService } from '../services/token.service';
 import { AlertService } from '../services/alert.service';
+import { AuthService } from '../services/auth.service';
+import { UserModel } from '../models/UserModel';
 
 @Component({
   selector: 'app-sign-up',
@@ -17,7 +19,8 @@ export class SignUpComponent implements OnInit{
     private alertService: AlertService,
     private router: Router,
     private userService: UserService,
-    private tokenService: TokenService) { }
+    private tokenService: TokenService,
+    private authService:AuthService) { }
 
   ngOnInit() {
 
@@ -25,10 +28,12 @@ export class SignUpComponent implements OnInit{
 
     register(signUpForm) {
       let dataForCreateUser = {
-        email:this.model.email,
-        username:this.model.username,
+        email: this.model.email,
+        username: this.model.username,
         password: this.model.password
       };
+      this.authService.Registration(dataForCreateUser);
+    }
   
       //this.signUpForm = signUpForm;
       //this.userService.createUser(dataForCreateUser).subscribe();
@@ -60,5 +65,5 @@ export class SignUpComponent implements OnInit{
       //    this.alertService.error(error.data.error.message);
       //  }
       //);
-    }
+  
 }

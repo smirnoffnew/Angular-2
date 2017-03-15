@@ -5,7 +5,6 @@ import { TokenService } from '../services/token.service';
 import { Restangular } from 'ng2-restangular';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
 import { AuthService } from 'ng2-ui-auth';
-import { AlertService } from '../services/alert.service';
 import 'rxjs/Rx';
 import * as _ from 'lodash';
 
@@ -16,8 +15,7 @@ export class UserService {
   
   constructor(private restangular:Restangular,
               private tokenService:TokenService,
-              private socialNetworkService:AuthService,
-              private alertService:AlertService) 
+              private socialNetworkService:AuthService) 
   {
     this.currentUser$ = new ReplaySubject();
     this.currentToken$ = new ReplaySubject();
@@ -37,47 +35,46 @@ export class UserService {
       return Observable.throw(err);
     })
     .filter(token => token) //не попадем в подписку если запрос обрветься и серевер не вернет ошибку
-    .map(token => new TokenModel(token)) //создаем четкую модель токена без методов рест ангуляра
-    .map(token => {  //возможность подписки на currentToken$
-      this.currentToken$.next(token);
+    .map(token => {
+      this.currentToken$.next( new TokenModel(token) );
+      this.tokenService.set( token.id );
       return token;
-    });
-    
+    })
   }
 
   authenticateUser(email:string, password:string) {
     return this.restangular.all('clients/login').post({email: email, password: password})
     .switchMap(data => {
-      this.currentToken$.next(new TokenModel(data)); //возможность подписки на currentToken$
+      this.currentToken$.next(new TokenModel(data));
+      this.tokenService.set( data.id );
       return this.restangular.one('tokens', data.id).one('user').get();  //получаем юзера по токену
     })
     .catch((err) => {
       this.currentToken$.error(err);
       return Observable.throw(err);
     })
-    .map(user => new UserModel(user))
     .map(user => {
-      this.currentUser$.next(user);
+      this.currentUser$.next( new UserModel(user) );
       return user;
-    });
+    })
   }
-
-  authenticateGoogle(){
-    return this.socialNetworkService.authenticate('google')
+  
+  socialNetworkAuthenticateUser(socialNetwork){
+    return this.socialNetworkService.authenticate(socialNetwork)
     .switchMap(data => {
-      let res = data.json();
-      this.currentToken$.next(new TokenModel(res.data)); 
-      return this.restangular.one('tokens', res.data.id).one('user').get();
+      let response = data.json();
+      this.currentToken$.next(new TokenModel(response.data));
+      this.tokenService.set( response.data.id );
+      return this.restangular.one('tokens', response.data.id).one('user').get();
     })
     .catch((err) => {
       this.currentToken$.error(err);
       return Observable.throw(err);
     })
-    .map(user => new UserModel(user))
     .map(user => {
-      this.currentUser$.next(user);
+      this.currentUser$.next( new UserModel(user) );
       return user;
-    });
+    })
   }
 
   

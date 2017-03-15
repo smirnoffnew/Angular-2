@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { Observable } from 'rxjs/Observable';
+import { ReplaySubject } from "rxjs/Rx";
+import 'rxjs/add/observable/of';
 
 @Injectable()
 export class TokenService {
@@ -16,7 +19,7 @@ export class TokenService {
     return Cookie.get(this.currentUser);
   }
   
-  set( value:string ) {
+  set( value:any ) {
     Cookie.set(this.currentUser, value, this.exdays);
   };
   
