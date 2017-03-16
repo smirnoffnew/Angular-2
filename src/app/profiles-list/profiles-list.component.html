@@ -1,0 +1,17 @@
+<md-card>
+  <a [routerLink]="['/profile/asdf']" routerLinkActive="active">asdf</a>
+</md-card>
+
+
+
+<md-card *ngFor="let profile of (profiles | async)">
+    <md-card-content>
+      <md-list>
+        <md-list-item *ngFor="let item of ( profile | keyAndValueOfObject)">
+          <span style="text-transform: capitalize">{{item.key}}: &nbsp;</span>
+          <span *ngIf="item.value == null" class="colorRed"> 'no data' </span>
+          <span *ngIf="item.value !== null">{{item.value}}</span>
+        </md-list-item>
+      </md-list>
+    </md-card-content>
+</md-card>
