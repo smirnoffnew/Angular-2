@@ -27,13 +27,6 @@ export class AuthGuard implements CanActivate {
           return false;
         }
 
-        //'sign-in sign-out' redirect for status: "Authorized"
-        if ( isLoggedIn && state.url=='/sign-out') {
-          this.tokenService.delete();
-          this.router.navigate(['/sign-in']);
-          return true;
-        }
-
         if ( isLoggedIn ) {
           //redirect for all Authorized urls status: "Authorized"
           return true;

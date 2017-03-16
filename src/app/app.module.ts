@@ -6,12 +6,14 @@ import { MaterialModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { routes } from './all-routs';
 import 'hammerjs';
-
 import { AppComponent } from './app.component';
-import { SignInComponent, SignUpComponent, SignOutComponent, FeedComponent, ProfileComponent} from './components.barrel';
+import { SignInComponent,
+         SignUpComponent,
+         FeedComponent,
+         ProfileComponent,
+         ProfilesListComponent} from './components.barrel';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserComponent } from './user/user.component';
-
 import { TokenService } from './services/token.service';
 import { UserService } from './services/user.service';
 import { AuthGuard } from './services/auth.guard';
@@ -22,10 +24,13 @@ import { AlertComponent } from './alert/alert.component';
 import { ProfileService } from './services/profile.service';
 import { AuthService } from './services/auth.service';
 
+import { KeyAndValueOfObject } from './pipes/keyAndValueOfObject';
+import { ObjectToArrayPipe } from './pipes/objectToArrayPipe';
 
 //resolvers
 import { ProfileResolverService } from './resolvers/profile.resolver.service';
 import { FeedResolverService } from './resolvers/feed.resolver.service';
+import { ProfilesListResolverService } from './resolvers/profiles-list.service';
 
 export const GOOGLE_CLIENT_ID = '945919728141-s8e4e961ie6jgi5hbuuvedv7vo1u40n5.apps.googleusercontent.com';
 export const FACEBOOK_CLIENT_ID = '656768837864102';
@@ -76,19 +81,24 @@ export class MyAuthConfig extends CustomConfig {
     FeedComponent,
     NotFoundComponent,
     UserComponent,
-    SignOutComponent,
     AlertComponent,
     ProfileComponent,
+    ObjectToArrayPipe,
+    KeyAndValueOfObject,
+    ProfilesListComponent
   ],
-  providers: [ 
+  providers: [
+    AuthService,
     AuthGuard, 
     UserService, 
     TokenService, 
     AlertService, 
     ProfileService,
+    
     ProfileResolverService,
-    FeedResolverService,
-    AuthService],
+    ProfilesListResolverService,
+    FeedResolverService
+  ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

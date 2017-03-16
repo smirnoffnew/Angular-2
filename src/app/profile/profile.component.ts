@@ -1,42 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { AlertService } from '../services/alert.service';
-import { ProfileModel } from '../models/ProfileModel';
 import { ProfileService } from '../services/profile.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
 
   profile:any = {};
   profileForm:any = {};
-
+  
   constructor(private userService:UserService,
               private alertService:AlertService,
               private profileService:ProfileService,
-              private activatedRoute:ActivatedRoute) {
+              private activatedRoute:ActivatedRoute ) {
     
-    this.profile.date_of_birth = "2017-03-13T10:17:23.152Z";
-    this.profile.phone_number = "0665712165";
   }
 
   ngOnInit() {
-    this.profile = this.activatedRoute.snapshot.data['news'];
-    //this.userService.getUserProfile()
-    //.subscribe(
-    //  (profile) => {
-    //    this.profile = profile;
-    //    console.log('currentProfile$ data', profile);
-    //  },
-    //  (error) => {
-    //    let res = error.json();
-    //    this.alertService.error(res.error.message);
-    //  }
-    //);
+    this.activatedRoute.params.subscribe((params: Params) => {
+      console.log('params[\'id\']', params['username']);
+    });
+    this.profile = this.profileService.resolver;
+    this.profile.subscribe(
+      (data)=>{ console.log('profile id', data.data); }
+    )
   }
   
   saveProfile(){

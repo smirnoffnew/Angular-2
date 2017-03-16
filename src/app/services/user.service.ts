@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { UserModel } from '../models/UserModel';
 import { TokenModel } from '../models/TokenModel';
+import { Observable, ReplaySubject } from 'rxjs/Rx';
 import { TokenService } from '../services/token.service';
 import { Restangular } from 'ng2-restangular';
-import { Observable, ReplaySubject } from 'rxjs/Rx';
 import { AuthService } from 'ng2-ui-auth';
 import 'rxjs/Rx';
 import * as _ from 'lodash';
@@ -12,7 +12,6 @@ import * as _ from 'lodash';
 export class UserService {
   public currentUser$;
   public currentToken$;
-  
   constructor(private restangular:Restangular,
               private tokenService:TokenService,
               private socialNetworkService:AuthService) 
@@ -24,10 +23,10 @@ export class UserService {
   createUser(dataForCreateUser) {
     return this.restangular.all('clients').post(dataForCreateUser) //http://2muchcoffee.com:53000/api/clients
     .switchMap(data => {
-      this.currentUser$.next(new UserModel(data)); //возможность подписки на currentUser$
+      this.currentUser$.next(new UserModel(data));
       return data.all('accessTokens').getList();  //идем на новый урл для получения токена, ID подставляеться по умолчанию
     }) //http://2muchcoffee.com:53000/api/clients/58c662e7292db74b49090d3f/accessTokens
-    .map(tokens => { //фильтруем самый новый токен из массива хотя там всегда один объект ))
+    .map(tokens => {
       return _.maxBy(tokens, 'created');
     })
     .catch((err) => {
@@ -47,7 +46,7 @@ export class UserService {
     .switchMap(data => {
       this.currentToken$.next(new TokenModel(data));
       this.tokenService.set( data.id );
-      return this.restangular.one('tokens', data.id).one('user').get();  //получаем юзера по токену
+      return this.restangular.one('tokens', data.id).one('user').get();
     })
     .catch((err) => {
       this.currentToken$.error(err);

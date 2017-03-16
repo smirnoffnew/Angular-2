@@ -8,10 +8,15 @@
     color: #fff;
 }
 
+.colorRed {
+    color: red;
+}
+
 .navbarLink {
     margin-left: 20px;
     color: #fff;
-
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .active {

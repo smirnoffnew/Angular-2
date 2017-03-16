@@ -4,10 +4,10 @@ import { ProfileService } from '../services/profile.service';
 import { AuthService } from '../services/auth.service';
 
 @Injectable()
-export class ProfileResolverService implements Resolve<any> {
+export class ProfilesListResolverService implements Resolve<any> {
   private user:any;
   constructor(private authService:AuthService,
-              private profileService:ProfileService) 
+              private profileService:ProfileService)
   {
     this.authService.currentUser$.subscribe(
       (data)=>{
@@ -18,8 +18,8 @@ export class ProfileResolverService implements Resolve<any> {
       }
     )
   }
-
+  
   resolve() {
-    this.profileService.resolver = this.profileService.get(this.user.username);
+    this.profileService.getAllResolver = this.profileService.getAll();
   }
 }
