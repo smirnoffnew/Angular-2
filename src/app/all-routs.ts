@@ -5,7 +5,10 @@ import {
   NotFoundComponent,
   UserComponent,
   ProfileComponent,
-  ProfilesListComponent
+  ProfilesListComponent,
+  ProfileEditComponent,
+  ProfileViewComponent,
+  ProfileMainParentComponent
 } from './components.barrel';
 
 import { AuthGuard } from './services/auth.guard';
@@ -25,27 +28,41 @@ export const routes = [
   },
 
   {
-    path: 'profile/:username',
+    path: 'profile',
     name: 'Profile',
-    component: ProfileComponent,
+    component: ProfileMainParentComponent,
     canActivate: [AuthGuard],
-    resolve: {
-      profile: ProfileResolverService
-    }
+    children: [ 
+      {
+        path: ':username',
+        component: ProfileComponent,
+        resolve: {
+          profile: ProfileResolverService
+        },
+        children: [
+          {
+            path: 'edit',
+            component: ProfileEditComponent,
+          },
+          {
+            path: '',
+            component: ProfileViewComponent,
+          },
+        ]
+      },
+      {
+        path: '',
+        name: 'ProfileList',
+        component: ProfilesListComponent,
+        canActivate: [AuthGuard],
+        resolve: {
+          profile: ProfilesListResolverService
+        }
+      },
+    ]
   },
-    
-  {
-    path: 'profiles-list',
-    name: 'ProfileList',
-    component: ProfilesListComponent,
-    canActivate: [AuthGuard],
-    resolve: {
-      profile: ProfilesListResolverService
-    }
-  },
-  
 
-  { path: '',             name: 'Feed',      component: FeedComponent,     canActivate: [AuthGuard] },
+  { path: '',             name: 'Feed',      component: FeedComponent,     canActivate: [AuthGuard], pathMatch: 'full'  },
   { path: 'sign-in',      name: 'SignIn',    component: SignInComponent,   canActivate: [AuthGuard] },
   { path: 'sign-up',      name: 'SignUp',    component: SignUpComponent,   canActivate: [AuthGuard] },
   { path: 'user',         name: 'User',      component: UserComponent,     canActivate: [AuthGuard] },

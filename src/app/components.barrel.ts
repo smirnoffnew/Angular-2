@@ -5,3 +5,6 @@ export * from './not-found/not-found.component';
 export * from './user/user.component';
 export * from './profile/profile.component';
 export * from './profiles-list/profiles-list.component';
+export * from './profile-edit/profile-edit.component';
+export * from './profile-view/profile-view.component';
+export * from './profile-main-parent/profile-main-parent.component';

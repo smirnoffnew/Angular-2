@@ -48,7 +48,7 @@ export class AuthService {
 
   LoggOuting(){
     this.restangular.all('clients').all('logout')
-        .getList()
+        .post()
         .subscribe(
             ()=>{
               this.tokenService.delete();
@@ -73,7 +73,7 @@ export class AuthService {
       }
     })
     .map( (data) => {
-      if( data ) { 
+      if( data ) {
         this.currentUser$.next(data);
         return true;
       } else {

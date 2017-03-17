@@ -12,6 +12,19 @@
     color: red;
 }
 
+.sub-primary-color {
+    background-color: #ede7f6
+}
+
+.background-color {
+    background-color: #e3e3e3;
+}
+
+.card {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 .navbarLink {
     margin-left: 20px;
     color: #fff;
@@ -22,4 +35,9 @@
 .active {
     color:mediumvioletred;
     cursor: default;
+}
+
+.edit-card-aria-button{
+    text-align: right;
+    margin-top: -30px;
 }

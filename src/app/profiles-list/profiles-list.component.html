@@ -4,7 +4,7 @@
 
 
 
-<md-card *ngFor="let profile of (profiles | async)">
+<md-card *ngFor="let profile of (profiles | async)" class="card">
     <md-card-content>
       <md-list>
         <md-list-item *ngFor="let item of ( profile | keyAndValueOfObject)">

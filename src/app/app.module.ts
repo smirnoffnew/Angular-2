@@ -11,7 +11,10 @@ import { SignInComponent,
          SignUpComponent,
          FeedComponent,
          ProfileComponent,
-         ProfilesListComponent} from './components.barrel';
+         ProfilesListComponent,
+         ProfileEditComponent,
+         ProfileViewComponent,
+         ProfileMainParentComponent} from './components.barrel';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserComponent } from './user/user.component';
 import { TokenService } from './services/token.service';
@@ -31,6 +34,7 @@ import { ObjectToArrayPipe } from './pipes/objectToArrayPipe';
 import { ProfileResolverService } from './resolvers/profile.resolver.service';
 import { FeedResolverService } from './resolvers/feed.resolver.service';
 import { ProfilesListResolverService } from './resolvers/profiles-list.service';
+
 
 export const GOOGLE_CLIENT_ID = '945919728141-s8e4e961ie6jgi5hbuuvedv7vo1u40n5.apps.googleusercontent.com';
 export const FACEBOOK_CLIENT_ID = '656768837864102';
@@ -85,7 +89,10 @@ export class MyAuthConfig extends CustomConfig {
     ProfileComponent,
     ObjectToArrayPipe,
     KeyAndValueOfObject,
-    ProfilesListComponent
+    ProfilesListComponent,
+    ProfileEditComponent,
+    ProfileViewComponent,
+    ProfileMainParentComponent
   ],
   providers: [
     AuthService,

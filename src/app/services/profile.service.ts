@@ -20,6 +20,3 @@ export class ProfileService {
     return this.restangular.all('profiles').getList()
   }
 }
-
-//   // Just ONE GET to /accounts/123/buildings/456
-//    this.restangular.one('accounts', 123).one('buildings', 456).get();
