@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
-import { AlertService } from '../services/alert.service';
 import { ProfileService } from '../services/profile.service';
-import { ActivatedRoute, Params } from '@angular/router';
 import { DestroySubscribers } from "ng2-destroy-subscribers";
+import { AuthService } from '../services/auth.service';
+import { ProfileModel } from '../models/ProfileModel';
+import { AlertService } from '../services/alert.service';
+import { Router, ActivatedRoute, Params }   from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -17,29 +18,65 @@ import { DestroySubscribers } from "ng2-destroy-subscribers";
   destroyFunc: 'ngOnDestroy',
 })
 export class ProfileViewComponent implements OnInit {
-  isProfileExist;
+  isProfileExist:boolean;
   subscribers: any = {};
   profile:any = {};
-  profileForm:any = {};
+  editFlag:boolean;
+  createFlag:boolean;
+
   
-  constructor(private userService:UserService,
-              private alertService:AlertService,
+  constructor(private authService:AuthService,
               private profileService:ProfileService,
-              private activatedRoute:ActivatedRoute ) {
-    this.isProfileExist = false;
+              private alertService:AlertService,
+              private router:Router,
+              private activatedRoute:ActivatedRoute) {
+    this.profile = this.profileService.getProfile$;
+    this.isProfileExist = true;
   }
   
   ngOnInit() {
-    this.profile = this.profileService.resolver;
+    this.activatedRoute.params
+    //.switchMap(    (params: Params) => {console.log('params[\'id\']', params['id']); } )
+    .subscribe( (params: Params) => {console.log('aaa', params['username']);});
+
   }
   
   addSubscribers() {
+
+
     this.profile.subscribe(
       (data)=>{
         this.isProfileExist = !ProfileViewComponent.isEmptyObject(data.data);
-        console.log('   this.isProfileExist', this.isProfileExist);
+      },
+      (error) => {
+        let errObject = error.json();
+        this.alertService.error(errObject.error.message);
+        this.isProfileExist = false;
       }
-    )
+    );
+
+    this.profileService.getProfile$
+    .combineLatest(
+      this.authService.currentUser$, (profile:any, user:any) => {
+
+        if ( !profile.hasOwnProperty('data') ){
+          profile.data = new ProfileModel({});
+          this.isProfileExist = false;
+        }
+        return profile.data.clientId == user.id;
+      })
+    .subscribe(
+      (result)=>{
+        this.editFlag = result;
+      }
+    );
+
+    this.profileService.getProfile$.subscribe(
+      ()=>{
+
+      },
+      ()=>{}
+    );
   }
   
   saveProfile(){

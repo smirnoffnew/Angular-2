@@ -13,8 +13,12 @@ import {
 
 import { AuthGuard } from './services/auth.guard';
 import { FeedResolverService } from './resolvers/feed.resolver.service';
-import { ProfileResolverService } from './resolvers/profile.resolver.service';
+import { ViewProfileResolverService } from './resolvers/view.profile.resolver.service';
 import { ProfilesListResolverService } from './resolvers/profiles-list.service';
+import { EditProfileResolverService } from './resolvers/edit.profile.resolver.service';
+
+
+
 
 export const routes = [
   {
@@ -37,12 +41,16 @@ export const routes = [
         path: ':username',
         component: ProfileComponent,
         resolve: {
-          profile: ProfileResolverService
+          profile: ViewProfileResolverService
         },
+  
         children: [
           {
             path: 'edit',
             component: ProfileEditComponent,
+            resolve: {
+              profile: EditProfileResolverService
+            },
           },
           {
             path: '',

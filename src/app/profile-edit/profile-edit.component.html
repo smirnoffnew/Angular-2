@@ -3,28 +3,26 @@
   <md-card-content>
     <form name="profileForm" (ngSubmit)="saveProfile(profileForm);" #profileForm="ngForm">
 
-      <div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !full_name.valid }">
+      <div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !fullname.valid }">
         <md-input-container>
           <input mdInput
-            name="full_name"
+            name="fullname"
             placeholder="full name"
-            [(ngModel)]="profile.full_name"
-            #full_name="ngModel"
-            required>
+            [(ngModel)]="profile.fullname"
+            #fullname="ngModel">
         </md-input-container>
-        <div *ngIf="profileForm.submitted && !full_name.valid" class="help-block">full name is required</div>
+        <div *ngIf="profileForm.submitted && !fullname.valid" class="help-block">full name is required</div>
       </div>
 
-      <div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !phone_number.valid }">
+      <div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !phone.valid }">
         <md-input-container>
           <input mdInput
-            name="phone_number"
+            name="phone"
             placeholder="phone number"
-            [(ngModel)]="profile.phone_number"
-            #phone_number="ngModel"
-            required>
+            [(ngModel)]="profile.phone"
+            #phone="ngModel">
         </md-input-container>
-        <div *ngIf="profileForm.submitted && !phone_number.valid" class="help-block">phone number is required</div>
+        <div *ngIf="profileForm.submitted && !phone.valid" class="help-block">phone number is required</div>
       </div>
 
       <div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !height.valid }">
@@ -33,8 +31,7 @@
             name="height"
             placeholder="height"
             [(ngModel)]="profile.height"
-            #height="ngModel"
-            required>
+            #height="ngModel">
         </md-input-container>
         <div *ngIf="profileForm.submitted && !height.valid" class="help-block">height is required</div>
       </div>
@@ -45,40 +42,42 @@
             name="weight"
             placeholder="weight"
             [(ngModel)]="profile.weight"
-            #weight="ngModel"
-            required>
+            #weight="ngModel">
         </md-input-container>
         <div *ngIf="profileForm.submitted && !weight.valid" class="help-block">weight is required</div>
       </div>
 
-      <div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !date_of_birth.valid }">
-        <md-input-container>
-          <input mdInput
-            name="date_of_birth"
-            placeholder="date of Birth"
-            [(ngModel)]="profile.date_of_birth"
-            #date_of_birth="ngModel"
-            required>
-        </md-input-container>
-        <div *ngIf="profileForm.submitted && !date_of_birth.valid" class="help-block">date of Birth is required</div>
+      <!--<div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !birthday.valid }">-->
+        <!--<md-input-container>-->
+          <!--<input mdInput-->
+            <!--name="birthday"-->
+            <!--placeholder="date of Birth"-->
+            <!--[(ngModel)]="profile.birthday"-->
+            <!--#birthday="ngModel"-->
+            <!--required>-->
+        <!--</md-input-container>-->
+        <!--<div *ngIf="profileForm.submitted && !birthday.valid" class="help-block">date of Birth is required</div>-->
+      <!--</div>-->
+
+      <div class="center date-container">
+        <material-datepicker [(date)]="profile.birthday"></material-datepicker>
       </div>
 
-      <div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !favorite_sneakers_brand.valid }">
+      <div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !snickersBrand.valid }">
         <md-input-container>
           <input mdInput
-            name="favorite_sneakers_brand"
+            name="snickersBrand"
             placeholder="favorite sneakers brand"
-            [(ngModel)]="profile.favorite_sneakers_brand"
-            #favorite_sneakers_brand="ngModel"
-            required>
+            [(ngModel)]="profile.snickersBrand"
+            #snickersBrand="ngModel">
         </md-input-container>
-        <div *ngIf="profileForm.submitted && !favorite_sneakers_brand.valid" class="help-block">favorite sneakers brand
+        <div *ngIf="profileForm.submitted && !snickersBrand.valid" class="help-block">favorite sneakers brand
           is required
         </div>
       </div>
 
       <div class="center" style="margin-top: 20px;">
-        <button md-button (click)="saveProfile()" color="warn">Save</button>
+        <button md-button type="submit" color="warn">Save</button>
       </div>
     </form>
 

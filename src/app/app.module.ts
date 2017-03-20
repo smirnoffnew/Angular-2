@@ -3,7 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
-import { RouterModule } from '@angular/router';
+import { DatepickerModule } from 'angular2-material-datepicker'
+import { RouterModule, ActivatedRouteSnapshot} from '@angular/router';
 import { routes } from './all-routs';
 import 'hammerjs';
 import { AppComponent } from './app.component';
@@ -31,7 +32,8 @@ import { KeyAndValueOfObject } from './pipes/keyAndValueOfObject';
 import { ObjectToArrayPipe } from './pipes/objectToArrayPipe';
 
 //resolvers
-import { ProfileResolverService } from './resolvers/profile.resolver.service';
+import { ViewProfileResolverService } from './resolvers/view.profile.resolver.service';
+import { EditProfileResolverService } from './resolvers/edit.profile.resolver.service';
 import { FeedResolverService } from './resolvers/feed.resolver.service';
 import { ProfilesListResolverService } from './resolvers/profiles-list.service';
 
@@ -50,6 +52,7 @@ export class MyAuthConfig extends CustomConfig {
 @NgModule({
   imports: [
     MaterialModule,
+    DatepickerModule,
     BrowserModule,
     RouterModule.forRoot(routes),
     FormsModule,
@@ -101,8 +104,10 @@ export class MyAuthConfig extends CustomConfig {
     TokenService, 
     AlertService, 
     ProfileService,
-    
-    ProfileResolverService,
+ 
+  
+    ViewProfileResolverService,
+    EditProfileResolverService,
     ProfilesListResolverService,
     FeedResolverService
   ],

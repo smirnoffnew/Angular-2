@@ -2,7 +2,7 @@
 <md-card *ngIf = "isProfileExist" class="card">
   <md-card-title class="center" >
     <span>User profile</span>
-    <div class="edit-card-aria-button">
+    <div *ngIf = "editFlag"  class="edit-card-aria-button">
       <a md-raised-button [routerLink]="['edit']" class="sub-primary-color">Edit profile</a>
     </div>
   </md-card-title>

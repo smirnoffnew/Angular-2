@@ -5,9 +5,9 @@ import { AuthService } from '../services/auth.service';
 import { ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 
 @Injectable()
-export class ProfileResolverService implements Resolve<any> {
+export class EditProfileResolverService implements Resolve<any> {
   private user:any;
-  private routeParametr:any;
+
   constructor(private authService:AuthService,
               private profileService:ProfileService,
               private router: Router)
@@ -23,11 +23,6 @@ export class ProfileResolverService implements Resolve<any> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      console.log('ProfileResolverService !');
-      if (route.params['username']===undefined) {
-        this.router.navigate(['/profile/' + this.user.username]);
-      } else {
-        this.profileService.resolver = this.profileService.get( route.params['username'] );
-      }
+    this.profileService.getProfile$ = this.profileService.get( this.user.username );
   }
 }

@@ -12,6 +12,7 @@ import { DestroySubscribers } from "ng2-destroy-subscribers";
   initFunc: 'ngOnInit',
   destroyFunc: 'ngOnDestroy',
 })
+
 export class ProfileComponent implements OnInit {
   constructor() {}
   ngOnInit() {}

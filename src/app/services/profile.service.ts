@@ -4,12 +4,12 @@ import { ProfileModel } from '../models/ProfileModel';
 
 @Injectable()
 export class ProfileService {
-  public resolver:any;
+  public getProfile$:any;
   public getAllResolver:any;
   constructor( private restangular:Restangular ) {}
 
-  set( data:ProfileModel ) {
-    return this.restangular.all('profiles').post(data)
+  save( data:any, id:string ) {
+    return this.restangular.one('profiles', id).patch(data);
   };
 
   get(username) {

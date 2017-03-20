@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
     return this.authService.isLoggedIn()
-    .map( (isLoggedIn)=>{
+    .map( (isLoggedIn)=>{ 
 
         //'sign-in sign-up' redirect for status: "Not authorized"
         if ( !isLoggedIn && (state.url=='/sign-in' || state.url=='/sign-up') ) {
