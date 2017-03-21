@@ -25,7 +25,7 @@ export class AuthService {
   Registration(dataForCreateUser) {
     this.userService.createUser( dataForCreateUser ).subscribe(
         () => {
-          this.alertService.success('Registration successful', true);
+          //this.alertService.success('Registration successful', true);
           this.router.navigate(['/feed']);
         },
         (error) => {
@@ -37,7 +37,7 @@ export class AuthService {
   Logging(email:string, pasword:string) {
     this.userService.authenticateUser(email, pasword).subscribe(
         () => {
-          this.alertService.success('Authentication successful', true);
+          //this.alertService.success('Authentication successful', true);
           this.router.navigate(['/feed']);
         },
         (error) => {
@@ -47,23 +47,29 @@ export class AuthService {
   }
 
   LoggOuting(){
-    this.restangular.all('clients').all('logout')
-        .post()
-        .subscribe(
-            ()=>{
-              this.tokenService.delete();
-              this.router.navigate(['/sign-in']);
-            },
-            (error)=>{
-              this.tokenService.delete();
-              this.router.navigate(['/sign-in']);
-              let response = error.json();
-              this.alertService.error('We have error: \'' + response.error.message + '\' , but logouting successfully');
-            }
-        );
+
+  this.tokenService.delete();
+  this.router.navigate(['/sign-in']);
+  //this.alertService.success('You left site Successfully');
+
+    // this.restangular.all('clients').all('logout')
+    //     .post()
+    //     .subscribe(
+    //         ()=>{
+    //           this.tokenService.delete();
+    //           this.router.navigate(['/sign-in']);
+    //           this.alertService.success('You left site Successfully');
+    //         },
+    //         (error)=>{
+    //           this.tokenService.delete();
+    //           this.router.navigate(['/sign-in']);
+    //           let response = error.data.error.message();
+    //           this.alertService.error('We have error: \'' + response.error.message + '\' , but logouting successfully');
+    //         }
+    //     );
   }
 
-  isLoggedIn():Observable<boolean> {
+  isLoggedIn():Observable<boolean> { 
     let returnedObservable$ = Observable.of( this.tokenService.isTokenExist() )
     .switchMap(data => {
       if ( data ) {
@@ -80,7 +86,7 @@ export class AuthService {
         return false;
       }
     })
-    .catch((err) => { 
+    .catch((err) => {
       this.alertService.error( err.json() );
       return Observable.of(false);
     });

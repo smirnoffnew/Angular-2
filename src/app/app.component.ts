@@ -17,7 +17,6 @@ import { DestroySubscribers } from "ng2-destroy-subscribers";
 })
 export class AppComponent implements OnInit{
   private navbarFlag;
-
   private currentUser:any;
   constructor(private tokenService:TokenService,
               private router: Router,

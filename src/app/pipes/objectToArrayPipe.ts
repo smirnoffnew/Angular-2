@@ -5,7 +5,7 @@ import * as _ from 'lodash';
   name: 'objectToArrayPipe'
 })
 export class ObjectToArrayPipe implements PipeTransform {
-  transform(obj: any) { debugger;
+  transform(obj: any) {
     let aa = _.values(obj);
     return _.values(obj);
   }

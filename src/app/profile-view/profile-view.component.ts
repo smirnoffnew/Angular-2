@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ProfileService } from '../services/profile.service';
 import { DestroySubscribers } from "ng2-destroy-subscribers";
 import { AuthService } from '../services/auth.service';
-import { ProfileModel } from '../models/ProfileModel';
 import { AlertService } from '../services/alert.service';
 import { Router, ActivatedRoute, Params }   from '@angular/router';
+import { Observable, ReplaySubject } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-profile',
@@ -18,11 +18,11 @@ import { Router, ActivatedRoute, Params }   from '@angular/router';
   destroyFunc: 'ngOnDestroy',
 })
 export class ProfileViewComponent implements OnInit {
-  isProfileExist:boolean;
   subscribers: any = {};
   profile:any = {};
-  editFlag:boolean;
-  createFlag:boolean;
+  isProfileExist:boolean =true;
+  canEditProfileFlag:boolean;
+  canCreatProfileteFlag:boolean;
 
   
   constructor(private authService:AuthService,
@@ -30,53 +30,43 @@ export class ProfileViewComponent implements OnInit {
               private alertService:AlertService,
               private router:Router,
               private activatedRoute:ActivatedRoute) {
+
     this.profile = this.profileService.getProfile$;
-    this.isProfileExist = true;
   }
   
-  ngOnInit() {
-    this.activatedRoute.params
-    //.switchMap(    (params: Params) => {console.log('params[\'id\']', params['id']); } )
-    .subscribe( (params: Params) => {console.log('aaa', params['username']);});
-
-  }
+  ngOnInit() {}
   
   addSubscribers() {
-
-
-    this.profile.subscribe(
-      (data)=>{
-        this.isProfileExist = !ProfileViewComponent.isEmptyObject(data.data);
-      },
-      (error) => {
-        let errObject = error.json();
-        this.alertService.error(errObject.error.message);
-        this.isProfileExist = false;
-      }
-    );
-
     this.profileService.getProfile$
-    .combineLatest(
-      this.authService.currentUser$, (profile:any, user:any) => {
-
-        if ( !profile.hasOwnProperty('data') ){
-          profile.data = new ProfileModel({});
-          this.isProfileExist = false;
-        }
-        return profile.data.clientId == user.id;
+    .combineLatest( this.activatedRoute.params,
+      this.authService.currentUser$, (profile:any, routeParams:any, user:any) => {
+        return {profile:profile, routeParams:routeParams, user:user}
+      })
+      .catch((err) => {
+        this.alertService.error(err.data.error.message);
+        this.isProfileExist = false;
+        return Observable.throw(err);
       })
     .subscribe(
       (result)=>{
-        this.editFlag = result;
+        if ( result.profile.hasOwnProperty('data') ){
+          this.isProfileExist = true;
+          if (result.routeParams['username'] == result.user.username) {
+            this.canEditProfileFlag = true;
+          } else {
+            this.canEditProfileFlag = false;
+          }
+        } else {
+          this.isProfileExist = false;
+          if (result.routeParams['username'] == result.user.username) {
+            this.canCreatProfileteFlag = true;
+          } else {
+            this.canCreatProfileteFlag = false;
+          }
+        }
       }
     );
 
-    this.profileService.getProfile$.subscribe(
-      ()=>{
-
-      },
-      ()=>{}
-    );
   }
   
   saveProfile(){

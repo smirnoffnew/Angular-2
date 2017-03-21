@@ -15,7 +15,8 @@ import { SignInComponent,
          ProfilesListComponent,
          ProfileEditComponent,
          ProfileViewComponent,
-         ProfileMainParentComponent} from './components.barrel';
+         ProfileMainParentComponent,
+         ProfileCreateComponent} from './components.barrel';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserComponent } from './user/user.component';
 import { TokenService } from './services/token.service';
@@ -27,6 +28,7 @@ import { RestangularModule } from 'ng2-restangular';
 import { AlertComponent } from './alert/alert.component';
 import { ProfileService } from './services/profile.service';
 import { AuthService } from './services/auth.service';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 import { KeyAndValueOfObject } from './pipes/keyAndValueOfObject';
 import { ObjectToArrayPipe } from './pipes/objectToArrayPipe';
@@ -34,8 +36,14 @@ import { ObjectToArrayPipe } from './pipes/objectToArrayPipe';
 //resolvers
 import { ViewProfileResolverService } from './resolvers/view.profile.resolver.service';
 import { EditProfileResolverService } from './resolvers/edit.profile.resolver.service';
+import { CreateProfileResolverService } from './resolvers/create.profile.resolver.service';
 import { FeedResolverService } from './resolvers/feed.resolver.service';
 import { ProfilesListResolverService } from './resolvers/profiles-list.service';
+
+import { CookieService } from 'angular2-cookie/core';
+
+
+
 
 
 export const GOOGLE_CLIENT_ID = '945919728141-s8e4e961ie6jgi5hbuuvedv7vo1u40n5.apps.googleusercontent.com';
@@ -58,7 +66,7 @@ export class MyAuthConfig extends CustomConfig {
     FormsModule,
     HttpModule,
     Ng2UiAuthModule.forRoot(MyAuthConfig),
-    RestangularModule.forRoot((RestangularProvider) => {
+    RestangularModule.forRoot([TokenService],(RestangularProvider, tokenService) => {
       RestangularProvider.setBaseUrl('http://2muchcoffee.com:53000/api');
       //RestangularProvider.addErrorInterceptor( (response, subject, responseHandler) => {
       //  if (response.status) {
@@ -71,7 +79,6 @@ export class MyAuthConfig extends CustomConfig {
       //  return true; // error not handled
       //});
       RestangularProvider.addFullRequestInterceptor((element, operation, path, url, headers, params)=> {
-        let tokenService = new TokenService;
           return {
             params: Object.assign({}, params, tokenService.isTokenExist() ? {access_token: tokenService.get()} : {}),
             headers: headers,
@@ -95,7 +102,8 @@ export class MyAuthConfig extends CustomConfig {
     ProfilesListComponent,
     ProfileEditComponent,
     ProfileViewComponent,
-    ProfileMainParentComponent
+    ProfileMainParentComponent,
+    ProfileCreateComponent
   ],
   providers: [
     AuthService,
@@ -104,10 +112,13 @@ export class MyAuthConfig extends CustomConfig {
     TokenService, 
     AlertService, 
     ProfileService,
+    Cookie,
+    CookieService,
  
   
     ViewProfileResolverService,
     EditProfileResolverService,
+    CreateProfileResolverService,
     ProfilesListResolverService,
     FeedResolverService
   ],

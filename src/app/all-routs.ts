@@ -8,7 +8,8 @@ import {
   ProfilesListComponent,
   ProfileEditComponent,
   ProfileViewComponent,
-  ProfileMainParentComponent
+  ProfileMainParentComponent,
+  ProfileCreateComponent
 } from './components.barrel';
 
 import { AuthGuard } from './services/auth.guard';
@@ -16,9 +17,7 @@ import { FeedResolverService } from './resolvers/feed.resolver.service';
 import { ViewProfileResolverService } from './resolvers/view.profile.resolver.service';
 import { ProfilesListResolverService } from './resolvers/profiles-list.service';
 import { EditProfileResolverService } from './resolvers/edit.profile.resolver.service';
-
-
-
+import { CreateProfileResolverService } from './resolvers/create.profile.resolver.service';
 
 export const routes = [
   {
@@ -53,8 +52,18 @@ export const routes = [
             },
           },
           {
+            path: 'create',
+            component: ProfileCreateComponent,
+            resolve: {
+              profile: CreateProfileResolverService
+            },
+          },
+          {
             path: '',
             component: ProfileViewComponent,
+            resolve: {
+              profile: ViewProfileResolverService
+            },
           },
         ]
       },

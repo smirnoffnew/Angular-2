@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
 import { DestroySubscribers } from "ng2-destroy-subscribers";
 import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
+import { ProfileModel } from '../models/ProfileModel';
 
 @DestroySubscribers({
   addSubscribersFunc: 'addSubscribers',
@@ -28,36 +29,21 @@ export class ProfileEditComponent implements OnInit {
   ngOnInit() { }
 
   addSubscribers() {
-    this.profileService.getProfile$
-    .subscribe( (data)=>{
-        this.profile = data.data;
-        this.profile.birthday = new Date( this.profile.birthday );
-      },
-      (error)=>{
-        this.alertService.error(error.data.error.message);
-      }
-    );
-
-    this.authService.currentUser$.subscribe(
-      (user) => {
-        this.user = user;
-      },
-      (error)=>{
-        this.alertService.error(error.data.error.message);
-      }
-    );
-
     this.profileService.getProfile$.combineLatest(
-      this.authService.currentUser$, (profile:any, user:any) => {
-        return { user: user, isItUsersProfile: profile.data.clientId !== user.id }
-      }
+        this.authService.currentUser$, (profile:any, user:any) => {
+          return {profile:profile, user:user }
+        }
     ).subscribe(
-      (result)=>{
-        if (result.isItUsersProfile)
-         this.router.navigate(['/profile/' +result.user.username+ '/edit']);
-      }
+        (result)=>{
+          if (!result.profile.hasOwnProperty('data') && this.router.url == '/profile/' +result.user.username+ '/edit') {
+            this.router.navigate(['/profile/' +result.user.username]);
+            console.log('profile+result.user.username');
+          }
+          this.user = result.user;
+          this.profile = new ProfileModel(result.profile.data);
+          this.profile.birthday = new Date( this.profile.birthday );
+        }
     );
-
   }
 
   saveProfile() {
@@ -76,7 +62,7 @@ export class ProfileEditComponent implements OnInit {
     };
     this.profileService.save(profileObject, this.profile.id).subscribe(
       (data)=>{
-        this.alertService.success('Successfully saved');
+        //this.alertService.success('Successfully saved');
         this.router.navigate(['profile/' + this.user.username]);
       },
       (error)=>{

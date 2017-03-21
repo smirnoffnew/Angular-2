@@ -35,15 +35,16 @@ export class UserService {
     })
     .filter(token => token) //не попадем в подписку если запрос обрветься и серевер не вернет ошибку
     .map(token => {
-      this.currentToken$.next( new TokenModel(token) );
+      this.currentToken$.next( new TokenModel(token) ); debugger;
       this.tokenService.set( token.id );
       return token;
     })
   }
 
-  authenticateUser(email:string, password:string) {
+  authenticateUser(email:string, password:string) { 
     return this.restangular.all('clients/login').post({email: email, password: password})
-    .switchMap(data => {
+    .switchMap(data => { 
+      console.log('tokenService.set', data);
       this.currentToken$.next(new TokenModel(data));
       this.tokenService.set( data.id );
       return this.restangular.one('tokens', data.id).one('user').get();
@@ -56,6 +57,7 @@ export class UserService {
       this.currentUser$.next( new UserModel(user) );
       return user;
     })
+
   }
   
   socialNetworkAuthenticateUser(socialNetwork){
@@ -63,7 +65,7 @@ export class UserService {
     .switchMap(data => {
       let response = data.json();
       this.currentToken$.next(new TokenModel(response.data));
-      this.tokenService.set( response.data.id );
+      this.tokenService.set( response.data.id ); debugger;
       return this.restangular.one('tokens', response.data.id).one('user').get();
     })
     .catch((err) => {
@@ -77,24 +79,4 @@ export class UserService {
   }
 
   
-  //getUserProfile() {
-  //  if ( UserService.isEmptyObject(this.currentUser) ) {
-  //    return this.restangular.one('tokens', this.tokenService.get()).one('user').get()
-  //    .switchMap(data => {
-  //      this.currentUser$.next(new UserModel(data));
-  //      return this.restangular.one('clients', data.username).one('get-profile').get();
-  //    })
-  //    .catch((err) => {
-  //      return Observable.throw(err);
-  //    })
-  //    .map(profile => {
-  //      return profile;
-  //    });
-  //  } else {
-  //    return this.restangular.one('clients', this.currentUser.username).one('get-profile').get();
-  //  }
-  //}
-  //
-
-
 }

@@ -8,3 +8,4 @@ export * from './profiles-list/profiles-list.component';
 export * from './profile-edit/profile-edit.component';
 export * from './profile-view/profile-view.component';
 export * from './profile-main-parent/profile-main-parent.component';
+export * from './profile-create/profile-create.component';

@@ -4,6 +4,11 @@
     text-align: center;
 }
 
+.center-text {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .colorWhite {
     color: #fff;
 }
@@ -45,4 +50,9 @@
 .date-container {
     margin-top: 15px;
     margin-bottom: 20px;
+}
+
+.cdk-overlay-pane {
+    position: absolute !important;
+    top: 50%;
 }

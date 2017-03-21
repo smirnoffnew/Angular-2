@@ -1,22 +1,22 @@
 <router-outlet></router-outlet>
-<md-card *ngIf = "isProfileExist" class="card">
-  <md-card-title class="center" >
+<md-card class="card">
+  <md-card-title *ngIf = "!isProfileExist" class="center" >Sorry, but there is no profile for this user</md-card-title>
+  <md-card-title *ngIf = "isProfileExist" class="center" >
     <span>User profile</span>
-    <div *ngIf = "editFlag"  class="edit-card-aria-button">
+    <div *ngIf = "canEditProfileFlag"  class="edit-card-aria-button">
       <a md-raised-button [routerLink]="['edit']" class="sub-primary-color">Edit profile</a>
     </div>
   </md-card-title>
-
   <md-card-content color="foreground">
-    <md-list>
+    <md-list *ngIf = "isProfileExist">
       <md-list-item *ngFor="let item of ( (profile | async)?.data | keyAndValueOfObject)">
         <span style="text-transform: capitalize">{{item.key}}: &nbsp;</span>
         <span *ngIf="item.value == null" class="colorRed"> 'no data' </span>
         <span *ngIf="item.value !== null">{{item.value}}</span>
       </md-list-item>
     </md-list>
+    <div class="center">
+      <a *ngIf = "canCreatProfileteFlag" md-raised-button color="accent" [routerLink]="['create']">Create your profile</a>
+    </div>
   </md-card-content>
-</md-card>
-<md-card *ngIf = "!isProfileExist" class="card">
-  <md-card-title class="center" >Sorry, but there is no profile for this user</md-card-title>
 </md-card>

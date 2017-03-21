@@ -1,5 +1,5 @@
 <md-toolbar color="primary">
-  <div *ngIf="navbarFlag">
+  <div class="center-text" *ngIf="navbarFlag">
     <a class="navbarLink" (click)="logout()">Logout</a>
     <a class="navbarLink" [routerLink]="['/user']" routerLinkActive="active">Current User Info</a>
 
