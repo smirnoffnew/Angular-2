@@ -13,7 +13,6 @@ import { UserService } from '../services/user.service';
 @Injectable()
 export class AuthService {
   public currentUser$;
-  public resolver:any;
   constructor(private restangular:Restangular,
               private tokenService:TokenService,
               private alertService:AlertService,
@@ -25,7 +24,7 @@ export class AuthService {
   Registration(dataForCreateUser) {
     this.userService.createUser( dataForCreateUser ).subscribe(
         () => {
-          //this.alertService.success('Registration successful', true);
+          this.alertService.success('Registration successful', true);
           this.router.navigate(['/feed']);
         },
         (error) => {
@@ -37,7 +36,7 @@ export class AuthService {
   Logging(email:string, pasword:string) {
     this.userService.authenticateUser(email, pasword).subscribe(
         () => {
-          //this.alertService.success('Authentication successful', true);
+          this.alertService.success('Authentication successful', true);
           this.router.navigate(['/feed']);
         },
         (error) => {
@@ -47,10 +46,9 @@ export class AuthService {
   }
 
   LoggOuting(){
-
-  this.tokenService.delete();
-  this.router.navigate(['/sign-in']);
-  //this.alertService.success('You left site Successfully');
+    this.tokenService.remove();
+    this.router.navigate(['/sign-in']);
+    this.alertService.success('You left site Successfully');
 
     // this.restangular.all('clients').all('logout')
     //     .post()

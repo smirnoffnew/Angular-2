@@ -24,14 +24,13 @@ export class AlertComponent implements OnInit {
     this.alertService.getMessage()
       .subscribe(
         (message) => {
-          console.log('message', message);
-          //if ( message !== undefined ) {
-          //  if ( message.type == 'error') {
-          //    this.snackBar.open( message.text, message.type, {duration:4000 });
-          //  } else {
-          //    this.snackBar.open( message.text, message.type, {duration:1000 });
-          //  }
-          //}
+          if ( message !== undefined ) {
+           if ( message.type == 'error') {
+             this.snackBar.open( message.text, message.type, {duration:4000 });
+           } else {
+             this.snackBar.open( message.text, message.type, {duration:1000 });
+           }
+          }
         }
       );
   }

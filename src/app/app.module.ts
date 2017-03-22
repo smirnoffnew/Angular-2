@@ -29,23 +29,29 @@ import { AlertComponent } from './alert/alert.component';
 import { ProfileService } from './services/profile.service';
 import { AuthService } from './services/auth.service';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
-
 import { KeyAndValueOfObject } from './pipes/keyAndValueOfObject';
 import { ObjectToArrayPipe } from './pipes/objectToArrayPipe';
 
 //resolvers
+import { ProfilesListResolverService } from './resolvers/profiles-list.service';
+import { CreateProfileResolverService } from './resolvers/create.profile.resolver.service';
 import { ViewProfileResolverService } from './resolvers/view.profile.resolver.service';
 import { EditProfileResolverService } from './resolvers/edit.profile.resolver.service';
-import { CreateProfileResolverService } from './resolvers/create.profile.resolver.service';
 import { FeedResolverService } from './resolvers/feed.resolver.service';
-import { ProfilesListResolverService } from './resolvers/profiles-list.service';
-
 import { CookieService } from 'angular2-cookie/core';
 
+import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
 
-
-
-
+export function RestangularConfigFactory (RestangularProvider,tokenService) {
+  RestangularProvider.setBaseUrl('http://2muchcoffee.com:53000/api');
+  RestangularProvider.addFullRequestInterceptor((element, operation, path, url, headers, params)=> {
+    return {
+      params: Object.assign({}, params, tokenService.isTokenExist() ? {access_token: tokenService.get()} : {}),
+      headers: headers,
+      element: element
+    }
+  });
+}
 export const GOOGLE_CLIENT_ID = '945919728141-s8e4e961ie6jgi5hbuuvedv7vo1u40n5.apps.googleusercontent.com';
 export const FACEBOOK_CLIENT_ID = '656768837864102';
 export class MyAuthConfig extends CustomConfig {
@@ -66,27 +72,7 @@ export class MyAuthConfig extends CustomConfig {
     FormsModule,
     HttpModule,
     Ng2UiAuthModule.forRoot(MyAuthConfig),
-    RestangularModule.forRoot([TokenService],(RestangularProvider, tokenService) => {
-      RestangularProvider.setBaseUrl('http://2muchcoffee.com:53000/api');
-      //RestangularProvider.addErrorInterceptor( (response, subject, responseHandler) => {
-      //  if (response.status) {
-      //    var errorMsg = response.statusText;
-      //    if(response.data.error.message) {
-      //      console.log('err', response.data.error.message);
-      //    }
-      //    return false; // error handled
-      //  }
-      //  return true; // error not handled
-      //});
-      RestangularProvider.addFullRequestInterceptor((element, operation, path, url, headers, params)=> {
-          return {
-            params: Object.assign({}, params, tokenService.isTokenExist() ? {access_token: tokenService.get()} : {}),
-            headers: headers,
-            element: element
-          }
-      });
-
-    }),
+    RestangularModule.forRoot([TokenService],RestangularConfigFactory),
   ],
   declarations: [
     AppComponent,
@@ -103,7 +89,8 @@ export class MyAuthConfig extends CustomConfig {
     ProfileEditComponent,
     ProfileViewComponent,
     ProfileMainParentComponent,
-    ProfileCreateComponent
+    ProfileCreateComponent,
+    ImageCropperComponent
   ],
   providers: [
     AuthService,

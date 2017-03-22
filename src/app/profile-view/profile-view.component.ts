@@ -5,6 +5,8 @@ import { AuthService } from '../services/auth.service';
 import { AlertService } from '../services/alert.service';
 import { Router, ActivatedRoute, Params }   from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
+import { ProfileModel } from "../models/ProfileModel";
+
 
 @Component({
   selector: 'app-profile',
@@ -18,20 +20,24 @@ import { Observable, ReplaySubject } from 'rxjs/Rx';
   destroyFunc: 'ngOnDestroy',
 })
 export class ProfileViewComponent implements OnInit {
-  subscribers: any = {};
+
   profile:any = {};
   isProfileExist:boolean =true;
   canEditProfileFlag:boolean;
   canCreatProfileteFlag:boolean;
+  imageExist:boolean;
 
-  
   constructor(private authService:AuthService,
               private profileService:ProfileService,
               private alertService:AlertService,
               private router:Router,
               private activatedRoute:ActivatedRoute) {
 
-    this.profile = this.profileService.getProfile$;
+    this.profile = this.profileService.getProfile$
+        .map( (profile) => {
+          profile.data = new ProfileModel(profile.data)
+          return profile;
+        });
   }
   
   ngOnInit() {}
@@ -51,6 +57,7 @@ export class ProfileViewComponent implements OnInit {
       (result)=>{
         if ( result.profile.hasOwnProperty('data') ){
           this.isProfileExist = true;
+          this.imageExist = result.profile.data.hasOwnProperty('image') && result.profile.data.image !== null;
           if (result.routeParams['username'] == result.user.username) {
             this.canEditProfileFlag = true;
           } else {
@@ -66,37 +73,8 @@ export class ProfileViewComponent implements OnInit {
         }
       }
     );
+  }
 
-  }
-  
-  saveProfile(){
-    
-    //let data = new ProfileModel({
-    //  birthday: this.profile.date_of_birth,
-    //  fullname: this.profile.full_name,
-    //  phone: this.profile.phone_number,
-    //  height: +this.profile.height,
-    //  weight: +this.profile.weight,
-    //  snickersBrand: this.profile.favorite_sneakers_brand,
-    //  image: '',
-    //  id: '',
-    //  clientId: user.id
-    //});
-    //
-    //console.log('data', data);
-    //
-    //this.profileService.set(data)
-    //.subscribe(
-    //  (data) => {
-    //    console.log('currentProfile$ data', data);
-    //  },
-    //  (error) => {
-    //    let res = error.json();
-    //    this.alertService.error(res.error.message);
-    //  }
-    //);
-  }
-  
   static isEmptyObject(obj) {
     for (var i in obj) {
       if (obj.hasOwnProperty(i)) {

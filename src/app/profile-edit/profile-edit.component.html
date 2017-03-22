@@ -47,33 +47,33 @@
         <div *ngIf="profileForm.submitted && !weight.valid" class="help-block">weight is required</div>
       </div>
 
-      <!--<div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !birthday.valid }">-->
-        <!--<md-input-container>-->
-          <!--<input mdInput-->
-            <!--name="birthday"-->
-            <!--placeholder="date of Birth"-->
-            <!--[(ngModel)]="profile.birthday"-->
-            <!--#birthday="ngModel"-->
-            <!--required>-->
-        <!--</md-input-container>-->
-        <!--<div *ngIf="profileForm.submitted && !birthday.valid" class="help-block">date of Birth is required</div>-->
-      <!--</div>-->
+      <div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !snickersBrand.valid }">
+        <md-input-container>
+          <input mdInput
+                 name="snickersBrand"
+                 placeholder="favorite sneakers brand"
+                 [(ngModel)]="profile.snickersBrand"
+                 #snickersBrand="ngModel">
+        </md-input-container>
+        <div *ngIf="profileForm.submitted && !snickersBrand.valid" class="help-block">favorite sneakers brand
+          is required
+        </div>
+      </div>
 
       <div class="center date-container">
         <material-datepicker [(date)]="profile.birthday"></material-datepicker>
       </div>
 
-      <div class="center" [ngClass]="{ 'has-error': profileForm.submitted && !snickersBrand.valid }">
-        <md-input-container>
-          <input mdInput
-            name="snickersBrand"
-            placeholder="favorite sneakers brand"
-            [(ngModel)]="profile.snickersBrand"
-            #snickersBrand="ngModel">
-        </md-input-container>
-        <div *ngIf="profileForm.submitted && !snickersBrand.valid" class="help-block">favorite sneakers brand
-          is required
+      <div class="center">
+        <div class="file-upload">
+          <span class="text">upload</span>
+          <input id="custom-input" type="file" (change)="fileChangeListener(false, $event)">
         </div>
+        <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+        <br>
+        <span class="result rounded" *ngIf="data.image" >
+          <img [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+        </span>
       </div>
 
       <div class="center" style="margin-top: 20px;">

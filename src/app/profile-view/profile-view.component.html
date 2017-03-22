@@ -8,13 +8,28 @@
     </div>
   </md-card-title>
   <md-card-content color="foreground">
-    <md-list *ngIf = "isProfileExist">
-      <md-list-item *ngFor="let item of ( (profile | async)?.data | keyAndValueOfObject)">
-        <span style="text-transform: capitalize">{{item.key}}: &nbsp;</span>
-        <span *ngIf="item.value == null" class="colorRed"> 'no data' </span>
-        <span *ngIf="item.value !== null">{{item.value}}</span>
-      </md-list-item>
-    </md-list>
+
+    <md-grid-list *ngIf = "isProfileExist" cols="6" rowHeight="200px" >
+
+      <md-grid-tile [colspan]="2" [rowspan]="2">
+          <h3 *ngIf = "!imageExist">No photo</h3>
+        <div>
+          <img  md-card-image class="image-style" [src]=" (profile | async)?.data.image ">
+        </div>
+      </md-grid-tile>
+
+      <md-grid-tile [colspan]="4" [rowspan]="2"  style="overflow: inherit; ">
+          <md-list *ngIf = "isProfileExist">
+            <md-list-item *ngFor="let item of ( (profile | async)?.data | keyAndValueOfObject)">
+              <span style="text-transform: capitalize">{{item.key}}: &nbsp;</span>
+              <span *ngIf="item.value == null" class="colorRed"> 'no data' </span>
+              <span *ngIf="item.value !== null">{{item.value}}</span>
+            </md-list-item>
+          </md-list>
+      </md-grid-tile>
+
+    </md-grid-list>
+
     <div class="center">
       <a *ngIf = "canCreatProfileteFlag" md-raised-button color="accent" [routerLink]="['create']">Create your profile</a>
     </div>
