@@ -85,7 +85,8 @@ export class ProfileEditComponent implements OnInit {
           }
           this.user = result.user;
           this.profile = new ProfileModel(result.profile.data);
-          this.fileChangeListener(this.profile.image);
+          if ( this.profile.image !== null )
+            this.fileChangeListener(this.profile.image);
           if (this.profile.birthday == null){
               this.profile.birthday = new Date();
           } else {

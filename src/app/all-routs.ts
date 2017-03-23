@@ -39,10 +39,6 @@ export const routes = [
       {
         path: ':username',
         component: ProfileComponent,
-        resolve: {
-          profile: ViewProfileResolverService
-        },
-  
         children: [
           {
             path: 'edit',

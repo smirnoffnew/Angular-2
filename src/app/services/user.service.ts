@@ -5,6 +5,7 @@ import { Observable, ReplaySubject } from 'rxjs/Rx';
 import { TokenService } from '../services/token.service';
 import { Restangular } from 'ng2-restangular';
 import { AuthService } from 'ng2-ui-auth';
+import { AlertService } from './alert.service';
 import 'rxjs/Rx';
 import * as _ from 'lodash';
 
@@ -14,28 +15,29 @@ export class UserService {
   public currentToken$;
   constructor(private restangular:Restangular,
               private tokenService:TokenService,
-              private socialNetworkService:AuthService) 
+              private socialNetworkService:AuthService,
+              private alertService:AlertService)
   {
-    this.currentUser$ = new ReplaySubject();
+    this.currentUser$ = new ReplaySubject(1);
     this.currentToken$ = new ReplaySubject();
   }
   
   createUser(dataForCreateUser) {
-    return this.restangular.all('clients').post(dataForCreateUser) //http://2muchcoffee.com:53000/api/clients
+    return this.restangular.all('clients').post(dataForCreateUser)
     .switchMap(data => {
       this.currentUser$.next(new UserModel(data));
-      return data.all('accessTokens').getList();  //идем на новый урл для получения токена, ID подставляеться по умолчанию
-    }) //http://2muchcoffee.com:53000/api/clients/58c662e7292db74b49090d3f/accessTokens
+      return data.all('accessTokens').getList();
+    })
     .map(tokens => {
       return _.maxBy(tokens, 'created');
     })
-    .catch((err) => {
-      this.currentUser$.error(err);
-      return Observable.throw(err);
+    .catch((error) => {
+      this.alertService.error(error.data.error.message);
+      return Observable.throw(error);
     })
-    .filter(token => token) //не попадем в подписку если запрос обрветься и серевер не вернет ошибку
+    .filter(token => token)
     .map(token => {
-      this.currentToken$.next( new TokenModel(token) ); debugger;
+      this.currentToken$.next( new TokenModel(token) );
       this.tokenService.set( token.id );
       return token;
     })
@@ -43,8 +45,7 @@ export class UserService {
 
   authenticateUser(email:string, password:string) { 
     return this.restangular.all('clients/login').post({email: email, password: password})
-    .switchMap(data => { 
-      console.log('tokenService.set', data);
+    .switchMap(data => {
       this.currentToken$.next(new TokenModel(data));
       this.tokenService.set( data.id );
       return this.restangular.one('tokens', data.id).one('user').get();
@@ -57,7 +58,6 @@ export class UserService {
       this.currentUser$.next( new UserModel(user) );
       return user;
     })
-
   }
   
   socialNetworkAuthenticateUser(socialNetwork){
@@ -65,7 +65,7 @@ export class UserService {
     .switchMap(data => {
       let response = data.json();
       this.currentToken$.next(new TokenModel(response.data));
-      this.tokenService.set( response.data.id ); debugger;
+      this.tokenService.set( response.data.id );
       return this.restangular.one('tokens', response.data.id).one('user').get();
     })
     .catch((err) => {

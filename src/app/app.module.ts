@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 import { DatepickerModule } from 'angular2-material-datepicker'
-import { RouterModule, ActivatedRouteSnapshot} from '@angular/router';
+import { RouterModule } from '@angular/router';
+
 import { routes } from './all-routs';
 import 'hammerjs';
 import { AppComponent } from './app.component';
@@ -19,16 +20,22 @@ import { SignInComponent,
          ProfileCreateComponent} from './components.barrel';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserComponent } from './user/user.component';
+import { AlertComponent } from './alert/alert.component';
+
 import { TokenService } from './services/token.service';
 import { UserService } from './services/user.service';
 import { AuthGuard } from './services/auth.guard';
-import { AlertService } from './services/alert.service';
-import { Ng2UiAuthModule, CustomConfig} from 'ng2-ui-auth';
-import { RestangularModule } from 'ng2-restangular';
-import { AlertComponent } from './alert/alert.component';
 import { ProfileService } from './services/profile.service';
 import { AuthService } from './services/auth.service';
-import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { AlertService } from './services/alert.service';
+
+
+import { Ng2UiAuthModule, CustomConfig } from 'ng2-ui-auth';
+import { RestangularModule } from 'ng2-restangular';
+import { CookieService } from 'angular2-cookie/core';
+import { ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
+
+
 import { KeyAndValueOfObject } from './pipes/keyAndValueOfObject';
 import { ObjectToArrayPipe } from './pipes/objectToArrayPipe';
 
@@ -38,12 +45,11 @@ import { CreateProfileResolverService } from './resolvers/create.profile.resolve
 import { ViewProfileResolverService } from './resolvers/view.profile.resolver.service';
 import { EditProfileResolverService } from './resolvers/edit.profile.resolver.service';
 import { FeedResolverService } from './resolvers/feed.resolver.service';
-import { CookieService } from 'angular2-cookie/core';
 
-import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
+
 
 export function RestangularConfigFactory (RestangularProvider,tokenService) {
-  RestangularProvider.setBaseUrl('http://2muchcoffee.com:53000/api');
+  RestangularProvider.setBaseUrl('http://kickstagram.2muchcoffee.com/api');
   RestangularProvider.addFullRequestInterceptor((element, operation, path, url, headers, params)=> {
     return {
       params: Object.assign({}, params, tokenService.isTokenExist() ? {access_token: tokenService.get()} : {}),
@@ -52,6 +58,9 @@ export function RestangularConfigFactory (RestangularProvider,tokenService) {
     }
   });
 }
+
+
+
 export const GOOGLE_CLIENT_ID = '945919728141-s8e4e961ie6jgi5hbuuvedv7vo1u40n5.apps.googleusercontent.com';
 export const FACEBOOK_CLIENT_ID = '656768837864102';
 export class MyAuthConfig extends CustomConfig {
@@ -60,7 +69,7 @@ export class MyAuthConfig extends CustomConfig {
     google: {clientId: GOOGLE_CLIENT_ID, url: '/clients/auth-google'},
     facebook: {clientId: FACEBOOK_CLIENT_ID, url: '/clients/auth-facebook'}
   };
-  baseUrl = 'http://2muchcoffee.com:53000/api/';
+  baseUrl = 'http://kickstagram.2muchcoffee.com/api/';
 }
 
 @NgModule({
@@ -72,7 +81,7 @@ export class MyAuthConfig extends CustomConfig {
     FormsModule,
     HttpModule,
     Ng2UiAuthModule.forRoot(MyAuthConfig),
-    RestangularModule.forRoot([TokenService],RestangularConfigFactory),
+    RestangularModule.forRoot([TokenService], RestangularConfigFactory),
   ],
   declarations: [
     AppComponent,
@@ -99,7 +108,6 @@ export class MyAuthConfig extends CustomConfig {
     TokenService, 
     AlertService, 
     ProfileService,
-    Cookie,
     CookieService,
  
   

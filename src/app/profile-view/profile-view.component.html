@@ -14,7 +14,7 @@
       <md-grid-tile [colspan]="2" [rowspan]="2">
           <h3 *ngIf = "!imageExist">No photo</h3>
         <div>
-          <img  md-card-image class="image-style" [src]=" (profile | async)?.data.image ">
+          <img class="image-style" [src]=" (profile | async)?.data.image ">
         </div>
       </md-grid-tile>
 
