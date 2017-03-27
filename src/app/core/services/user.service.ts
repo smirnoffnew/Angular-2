@@ -13,6 +13,7 @@ import * as _ from 'lodash';
 export class UserService {
   public currentUser$;
   public currentToken$;
+  public currentFeed$;
   constructor(private restangular:Restangular,
               private tokenService:TokenService,
               private socialNetworkService:AuthService,
@@ -25,6 +26,7 @@ export class UserService {
   createUser(dataForCreateUser) {
     return this.restangular.all('clients').post(dataForCreateUser)
     .switchMap(data => {
+      this.currentFeed$ = this.restangular.one('clients', data.id).one('feed').get();
       this.currentUser$.next(new UserModel(data));
       return data.all('accessTokens').getList();
     })
@@ -55,6 +57,7 @@ export class UserService {
       return Observable.throw(err);
     })
     .map(user => {
+      this.currentFeed$ = this.restangular.one('clients', user.id).one('feed').get();
       this.currentUser$.next( new UserModel(user) );
       return user;
     })
@@ -73,6 +76,7 @@ export class UserService {
       return Observable.throw(err);
     })
     .map(user => {
+      this.currentFeed$ = this.restangular.one('clients', user.id).one('feed').get();
       this.currentUser$.next( new UserModel(user) );
       return user;
     })

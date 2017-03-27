@@ -6,5 +6,8 @@ import { ProfileModel } from '../../models/ProfileModel';
 @Injectable()
 export class FeedResolverService implements Resolve<any> {
   constructor(private profileService:ProfileService) {}
-  resolve() {}
+  resolve() {
+
+
+  }
 }

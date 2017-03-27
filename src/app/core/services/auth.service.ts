@@ -13,19 +13,18 @@ import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
-  public currentUser;
+
+  public currentUser:any;
   public currentUser$;
-  public currentUserForOptimization$;
-  public alreadyHaveUser:boolean;
+
   constructor(private restangular:Restangular,
               private tokenService:TokenService,
               private alertService:AlertService,
               private userService:UserService,
               private router:Router) {
-    this.currentUser = {};
+
+    this.currentUser = false;
     this.currentUser$ = new ReplaySubject();
-    this.currentUserForOptimization$ = new ReplaySubject();
-    this.alreadyHaveUser = false;
   }
 
   Registration(dataForCreateUser) {
@@ -62,15 +61,15 @@ export class AuthService {
 
     this.userService.currentUser$.subscribe(
         (user) => {
-          this.alreadyHaveUser = true;
           this.currentUser = user;
         }
     );
 
+
     let returnedObservable$ = Observable.of( this.tokenService.isTokenExist() )
     .switchMap(data => {
       if ( data ) {
-        if ( this.alreadyHaveUser ) {
+        if ( this.currentUser ) {
           return Observable.of( this.currentUser );
         } else {
           return this.restangular.one('tokens', this.tokenService.get()).one('user').get()
@@ -81,7 +80,6 @@ export class AuthService {
     })
     .map( (data) => {
       if( data ) {
-        this.alreadyHaveUser = true;
         this.currentUser = data;
         this.currentUser$.next(data);
         return true;
