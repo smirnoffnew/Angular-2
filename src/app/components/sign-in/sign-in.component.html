@@ -1,0 +1,44 @@
+<md-card>
+  <md-card-title class="center" >Sign In</md-card-title>
+  <md-card-content>
+    <form name="signInForm" (ngSubmit)="signIn(signInForm);" #signInForm="ngForm">
+
+      <div class="center" [ngClass]="{ 'has-error': signInForm.submitted && !email.valid }">
+        <md-input-container>
+          <input mdInput
+            placeholder="email"
+            name="email"
+            [(ngModel)]="model.email"
+            #email="ngModel"
+            required >
+        </md-input-container>
+        <div *ngIf="signInForm.submitted && !email.valid" class="help-block">email is required</div>
+      </div>
+
+      <div class="center" [ngClass]="{ 'has-error': signInForm.submitted && !password.valid }">
+        <md-input-container>
+          <input mdInput
+            name="password"
+            type="password"
+            placeholder="password"
+            [(ngModel)]="model.password"
+            #password="ngModel"
+            required >
+        </md-input-container>
+        <div *ngIf="signInForm.submitted && !password.valid" class="help-block">Password is required</div>
+      </div>
+
+      <div class="center" style="margin-top: 20px;">
+        <button md-button [disabled]="signInForm.form.invalid">Login</button>
+        <a md-button [routerLink]="['/sign-up']" >Register</a>
+      </div>
+    </form>
+
+    <div class="center" style="margin-top: 20px;">
+      <button md-button (click)="socialNetworkIn('google')" color="warn">Google+</button>
+      <button md-button (click)="socialNetworkIn('facebook')" color="warn">FaceBook</button>
+    </div>
+  </md-card-content>
+</md-card>
+
+

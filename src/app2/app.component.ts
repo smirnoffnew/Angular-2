@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TokenService } from './core/services/token.service';
-import { AuthService } from './core/services/auth.service';
+import { TokenService } from './services/token.service';
+import { AuthService } from './services/auth.service';
 import { DestroySubscribers } from "ng2-destroy-subscribers";
 
 @Component({
