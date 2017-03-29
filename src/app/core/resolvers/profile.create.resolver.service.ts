@@ -26,6 +26,6 @@ export class CreateProfileResolverService implements Resolve<any> {
         if ( route.parent.params['username'] !== this.user.username) {
             this.router.navigate(['profile/' + this.user.username + '/create'])
         }
-        this.profileService.getProfile$ = this.profileService.get( this.user.username );
+        // this.profileService.getProfile$ = this.profileService.get( this.user.username );
     }
 }

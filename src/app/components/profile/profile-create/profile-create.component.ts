@@ -67,7 +67,7 @@ export class ProfileCreateComponent implements OnInit {
   }
 
   addSubscribers() {
-      this.profileSubscription = this.profileService.getProfile$.combineLatest(
+      this.profileSubscription = this.profileService.getProfileForView$.combineLatest(
         this.authService.currentUser$, (profile:any, user:any) => {
           return {profile:profile, user:user }
         }

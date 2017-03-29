@@ -9,7 +9,7 @@ import { ProfileViewComponent } from './profile-view/profile-view.component';
 import { ProfileEditComponent } from './profile-edit/profile-edit.component';
 
 import { ViewProfileResolverService } from '../../core/resolvers/profile.view.resolver.service';
-import { ProfilesListResolverService } from '../../core/resolvers/profiles.list.service';
+import { ProfilesListResolverService } from '../../core/resolvers/profiles.list.resolver.service';
 import { EditProfileResolverService } from '../../core/resolvers/profile.edit.resolver.service';
 import { CreateProfileResolverService } from '../../core/resolvers/profile.create.resolver.service';
 
@@ -34,9 +34,9 @@ export const routs = [
                     {
                         path: 'create',
                         component: ProfileCreateComponent,
-                        resolve: {
-                            profile: CreateProfileResolverService
-                        },
+                        // resolve: {
+                        //     profile: CreateProfileResolverService
+                        // },
                     },
                     {
                         path: '',

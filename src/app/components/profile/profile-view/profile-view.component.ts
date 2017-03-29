@@ -1,70 +1,60 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute  }   from '@angular/router';
+import { Observable } from 'rxjs/Rx';
+
 import { ProfileService } from '../../../core/services/profile.service';
-import { DestroySubscribers } from "ng2-destroy-subscribers";
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
-import { ActivatedRoute  }   from '@angular/router';
-import { Observable, ReplaySubject } from 'rxjs/Rx';
+
 
 @Component({
   selector: 'app-profile',
   templateUrl: 'profile-view.component.html',
   styleUrls: ['profile-view.component.css'],
 })
-@DestroySubscribers({
-  addSubscribersFunc: 'addSubscribers',
-  removeSubscribersFunc: 'removeSubscribers',
-  initFunc: 'ngOnInit',
-  destroyFunc: 'ngOnDestroy',
-})
+
 export class ProfileViewComponent implements OnInit {
   private user:any;
   private profile:any = {};
   private subscribers:any = {};
-  private isProfileExist:boolean =true;
-  private canEditProfileFlag:boolean;
-  private canCreatProfileteFlag:boolean;
-  private imageExist:boolean;
 
+  private isProfileExist:boolean = false;
+  private isImageExist:boolean = false;
+
+  private canEditProfileFlag:boolean = false;
+  private canCreatProfileteFlag:boolean = false;
 
   constructor(private authService:AuthService,
               private profileService:ProfileService,
               private alertService:AlertService,
-              private activatedRoute:ActivatedRoute) {
+              private activatedRoute:ActivatedRoute) {}
 
-    this.profile = this.profileService.getProfile$;
-  }
+  ngOnInit() {
+        this.subscribers.profileSubscription = this.profileService.getProfileForView$
 
-  ngOnInit(){}
+        .combineLatest(
+            this.authService.currentUser$,
+            this.activatedRoute.params,
+            (profile:any, user:any, routeParams:any) => { return {profile:profile, user:user, routeParams:routeParams} }
+        )
 
-  ngAfterViewInit() {
-    this.subscribers.profileSubscription = this.profileService.getProfile$
-        .combineLatest( this.activatedRoute.params,
-            this.authService.currentUser$, (profile:any, routeParams:any, user:any) => {
-              return {profile:profile, routeParams:routeParams, user:user}
-            })
-        .catch((err) => {
-          this.alertService.error(err.data.error.message);
-          this.isProfileExist = false;
-          return Observable.throw(err);
-        })
+        .catch( (error) => {
+              this.alertService.error(error.data.error.message);
+              return Observable.throw(error);
+            }
+        )
+
         .subscribe(
-            (result)=>{
-              if ( result.profile.hasOwnProperty('data') ){
+            (result)=>{ debugger;
+              if ( result.profile.hasOwnProperty('data') ) {
                 this.isProfileExist = true;
-                this.imageExist = result.profile.data.hasOwnProperty('image') && result.profile.data.image !== null;
-                if (result.routeParams['username'] == result.user.username) {
-                  this.canEditProfileFlag = true;
-                } else {
-                  this.canEditProfileFlag = false;
-                }
+                this.profile = result.profile.data;
+                this.isImageExist = result.profile.data.hasOwnProperty('image') && result.profile.data.image !== null;
+                this.canEditProfileFlag = result.routeParams['username'] == result.user.username;
               } else {
                 this.isProfileExist = false;
-                if (result.routeParams['username'] == result.user.username) {
-                  this.canCreatProfileteFlag = true;
-                } else {
-                  this.canCreatProfileteFlag = false;
-                }
+                this.canCreatProfileteFlag = result.routeParams['username'] == result.user.username;
+                this.canEditProfileFlag = result.routeParams['username'] == result.user.username;
               }
             }
         );

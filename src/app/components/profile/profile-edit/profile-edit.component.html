@@ -8,7 +8,7 @@
           <input mdInput
             name="fullname"
             placeholder="full name"
-            [(ngModel)]="profile.fullname"
+            [(ngModel)]="profile.data.fullname"
             #fullname="ngModel">
         </md-input-container>
         <div *ngIf="profileForm.submitted && !fullname.valid" class="help-block">full name is required</div>
@@ -19,7 +19,7 @@
           <input mdInput
             name="phone"
             placeholder="phone number"
-            [(ngModel)]="profile.phone"
+            [(ngModel)]="profile.data.phone"
             #phone="ngModel">
         </md-input-container>
         <div *ngIf="profileForm.submitted && !phone.valid" class="help-block">phone number is required</div>
@@ -30,7 +30,7 @@
           <input mdInput
             name="height"
             placeholder="height"
-            [(ngModel)]="profile.height"
+            [(ngModel)]="profile.data.height"
             #height="ngModel">
         </md-input-container>
         <div *ngIf="profileForm.submitted && !height.valid" class="help-block">height is required</div>
@@ -41,7 +41,7 @@
           <input mdInput
             name="weight"
             placeholder="weight"
-            [(ngModel)]="profile.weight"
+            [(ngModel)]="profile.data.weight"
             #weight="ngModel">
         </md-input-container>
         <div *ngIf="profileForm.submitted && !weight.valid" class="help-block">weight is required</div>
@@ -52,7 +52,7 @@
           <input mdInput
                  name="snickersBrand"
                  placeholder="favorite sneakers brand"
-                 [(ngModel)]="profile.snickersBrand"
+                 [(ngModel)]="profile.data.snickersBrand"
                  #snickersBrand="ngModel">
         </md-input-container>
         <div *ngIf="profileForm.submitted && !snickersBrand.valid" class="help-block">favorite sneakers brand
@@ -61,7 +61,7 @@
       </div>
 
       <div class="center date-container">
-        <material-datepicker [(date)]="profile.birthday"></material-datepicker>
+        <material-datepicker [(date)]="profile.data.birthday"></material-datepicker>
       </div>
 
       <div class="center">

@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Restangular } from 'ng2-restangular';
-import { ReplaySubject } from 'rxjs/Rx';
+import { ReplaySubject, Subject } from 'rxjs/Rx';
+import { AuthService } from '../../core/services/auth.service';
 
 @Injectable()
 export class ProfileService {
 
-  public getProfile$:any = new ReplaySubject(1);
-  public getAllResolver:any;
-  constructor( private restangular:Restangular ) {}
+  public getProfileForView$:any = new ReplaySubject(1);
+  public getProfileForEdit$:any = new ReplaySubject(1);
+  public getProfilesList$:any = new Subject();
+  public selfProfileAlreadyGetting:any = false;
+
+  constructor( private restangular:Restangular, private authService:AuthService) {}
 
   create( data:any ) {
     return this.restangular.all('profiles').post(data);

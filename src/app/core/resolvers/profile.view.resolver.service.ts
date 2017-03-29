@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve } from '@angular/router';
-import { ProfileService } from '../services/profile.service';
-import { AuthService } from '../services/auth.service';
 import { ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import { Router, Resolve } from '@angular/router';
+
 import { AlertService } from '../services/alert.service';
+import { AuthService } from '../services/auth.service';
+import { ProfileService } from '../services/profile.service';
 
 @Injectable()
 export class ViewProfileResolverService implements Resolve<any> {
   private user:any;
-
 
   constructor(private authService:AuthService,
               private profileService:ProfileService,
@@ -25,19 +25,28 @@ export class ViewProfileResolverService implements Resolve<any> {
     )
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) { debugger;
+      //for ability to redirect your profile when profile doesn't exist
       if (route.params['username']===undefined) {
-        this.router.navigate(['/profile/' + this.user.username]);
+        this.router.navigate(['/profile/' + this.user.username]); }
+
+
+      if ( route.params['username'] == this.user.username && this.profileService.selfProfileAlreadyGetting) {
+          this.profileService.getProfileForView$.next(this.profileService.selfProfileAlreadyGetting);
       } else {
           this.profileService.get( route.params['username'] ).subscribe(
-              (response)=>{
-                  this.profileService.getProfile$.next(response);
+              (response)=>{                                               debugger;
+                  this.profileService.getProfileForView$.next(response);
+                  if (route.params['username'] == this.user.username){
+                      this.profileService.getProfileForEdit$.next(response);
+                      this.profileService.selfProfileAlreadyGetting = response;
+                  }
               },
               ( error )=>{
                   this.alertService.error(error.data.error.message);
               }
           );
-
       }
+
   }
 }

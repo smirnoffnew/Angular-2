@@ -1,69 +1,95 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { ProfileService } from '../../../core/services/profile.service';
-import { DestroySubscribers } from "ng2-destroy-subscribers";
-import { AlertService } from '../../../core/services/alert.service';
-import { AuthService } from '../../../core/services/auth.service';
-import { ProfileModel } from '../../../models/ProfileModel';
-import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
 
-@DestroySubscribers({
-  addSubscribersFunc: 'addSubscribers',
-  removeSubscribersFunc: 'removeSubscribers',
-  initFunc: 'ngOnInit',
-  destroyFunc: 'ngOnDestroy',
-})
+import {ProfileService} from '../../../core/services/profile.service';
+import {AlertService} from '../../../core/services/alert.service';
+import {AuthService} from '../../../core/services/auth.service';
+import {ProfileModel} from '../../../models/ProfileModel';
+import {ImageCropperComponent, CropperSettings, Bounds} from 'ng2-img-cropper';
+
 @Component({
-  selector: 'app-profile-edit',
-  templateUrl: 'profile-edit.component.html',
-  styleUrls: ['profile-edit.component.css']
+    selector: 'app-profile-edit',
+    templateUrl: 'profile-edit.component.html',
+    styleUrls: ['profile-edit.component.css']
 })
 export class ProfileEditComponent implements OnInit {
 
-  private subscribers:any = {};
-  private profile:any = {};
-  private user:any = {};
-  private data:any = {};
-  private cropperSettings:CropperSettings;
-  private croppedWidth:number;
-  private croppedHeight:number;
-  private profileSubscription: any;
+    private subscribers: any = {};
+    private profile: any = {};
+    private user: any = {};
+    private data: any = {};
 
-  @ViewChild('cropper', undefined) cropper:ImageCropperComponent;
+    private cropperSettings: CropperSettings;
+    private croppedWidth: number;
+    private croppedHeight: number;
+    private profileSubscription: any;
 
+    @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
 
-  constructor(private profileService:ProfileService,
-              private alertService:AlertService,
-              private router:Router,
-              private authService:AuthService) {
+    constructor(private profileService: ProfileService,
+                private alertService: AlertService,
+                private router: Router,
+                private authService: AuthService) {
 
-      this.cropperSettings = new CropperSettings();
-      this.cropperSettings.width = 200;
-      this.cropperSettings.height = 200;
-      this.cropperSettings.croppedWidth = 200;
-      this.cropperSettings.croppedHeight = 200;
-      this.cropperSettings.canvasWidth = 500;
-      this.cropperSettings.canvasHeight = 300;
-      this.cropperSettings.minWidth = 10;
-      this.cropperSettings.minHeight = 10;
-      this.cropperSettings.rounded = false;
-      this.cropperSettings.keepAspect = false;
-      this.cropperSettings.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
-      this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
-      this.cropperSettings.noFileInput = true;
-  }
+        this.cropperSettings = new CropperSettings();
+        this.cropperSettings.width = 200;
+        this.cropperSettings.height = 200;
+        this.cropperSettings.croppedWidth = 200;
+        this.cropperSettings.croppedHeight = 200;
+        this.cropperSettings.canvasWidth = 500;
+        this.cropperSettings.canvasHeight = 300;
+        this.cropperSettings.minWidth = 10;
+        this.cropperSettings.minHeight = 10;
+        this.cropperSettings.rounded = false;
+        this.cropperSettings.keepAspect = false;
+        this.cropperSettings.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
+        this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
+        this.cropperSettings.noFileInput = true;
 
-  ngOnInit() { }
-
-    cropped(bounds:Bounds) {
-        this.croppedHeight =bounds.bottom-bounds.top;
-        this.croppedWidth = bounds.right-bounds.left;
+        this.profile.data = new ProfileModel;
     }
 
-    fileChangeListener( base64, $event? ) {
+    ngOnInit() {
+    }
+
+    ngAfterViewInit() {
+        this.subscribers.profileSubscription = this.profileService.getProfileForEdit$
+
+            .combineLatest(this.authService.currentUser$,
+                (profile: any, user: any) => {
+                    return {profile: profile, user: user}
+                })
+            .subscribe(
+                (result) => { debugger;
+                    //when user haven't profile
+                    if (!result.profile.hasOwnProperty('data') && this.router.url == '/profile/' + result.user.username + '/edit') {
+                        this.router.navigate(['/profile/' + result.user.username]);
+                    }
+
+                    this.profile = result.profile;
+                    this.user = result.user;
+
+                    if (this.profile.data.image !== null)
+                        this.fileChangeListener(this.profile.data.image);
+
+                    if (this.profile.data.birthday == null) {
+                        this.profile.data.birthday = new Date();
+                    } else {
+                        this.profile.data.birthday = new Date(this.profile.data.birthday);
+                    }
+                }
+            );
+    }
+
+    cropped(bounds: Bounds) {
+        this.croppedHeight = bounds.bottom - bounds.top;
+        this.croppedWidth = bounds.right - bounds.left;
+    }
+
+    fileChangeListener(base64, $event?) {
         let image: any = new Image();
         let that = this;
-        if ( base64 ) {
+        if (base64) {
             image.src = base64;
             that.cropper.setImage(image);
         } else {
@@ -77,58 +103,36 @@ export class ProfileEditComponent implements OnInit {
         }
     }
 
-  addSubscribers() {
-    this.profileSubscription = this.profileService.getProfile$.combineLatest(
-        this.authService.currentUser$, (profile:any, user:any) => {
-          return {profile:profile, user:user }
-        }
-    ).subscribe(
-        (result)=>{
-          if (!result.profile.hasOwnProperty('data') && this.router.url == '/profile/' +result.user.username+ '/edit') {
-            this.router.navigate(['/profile/' +result.user.username]);
-          }
-          this.user = result.user;
-          this.profile = new ProfileModel(result.profile.data);
-          if ( this.profile.image !== null )
-            this.fileChangeListener(this.profile.image);
-          if (this.profile.birthday == null){
-              this.profile.birthday = new Date();
-          } else {
-              this.profile.birthday = new Date( this.profile.birthday );
-          }
-        }
-    );
-  }
+    saveProfile() {
+        let profileObject = {
+            id: this.profile.data.id,
+            clientId: this.profile.data.clientId,
+            image: this.data.image,
+            birthday: this.profile.data.birthday,
+            fullname: this.profile.data.fullname,
+            height: this.profile.data.height,
+            phone: this.profile.data.phone,
+            snickersBrand: this.profile.data.snickersBrand,
+            weight: this.profile.data.weight,
+        };
 
-  saveProfile() {
-    let profileObject = {
-      //required fields
-      id: this.profile.id,
-      clientId: this.profile.clientId,
-
-      image: this.data.image,
-      birthday: this.profile.birthday,
-      fullname: this.profile.fullname,
-      height: this.profile.height,
-      phone: this.profile.phone,
-      snickersBrand: this.profile.snickersBrand,
-      weight: this.profile.weight,
-    };
-
-    this.profileService.save(profileObject, this.profile.id).subscribe(
-      (data)=>{
-        this.alertService.success('Successfully saved');
-        this.router.navigate(['profile/' + this.user.username]);
-      },
-      (error)=>{
-        this.alertService.error(error.data.error.message);
-      }
-    );
-  }
+        this.subscribers.savedProfileSubscription = this.profileService.save(profileObject, this.profile.data.id)
+            .subscribe(
+                (data) => {
+                    debugger;
+                    this.alertService.success('Successfully saved');
+                    this.router.navigate(['profile/' + this.user.username]);
+                    this.profileService.selfProfileAlreadyGetting.data = profileObject;
+                },
+                (error) => {
+                    this.alertService.error(error.data.error.message);
+                }
+            );
+    }
 
     ngOnDestroy() {
         for (let property in this.subscribers) {
-            if ( (typeof this.subscribers[property] !== 'undefined') && (this.subscribers[property] !== null) ) {
+            if ((typeof this.subscribers[property] !== 'undefined') && (this.subscribers[property] !== null)) {
                 this.subscribers[property].unsubscribe();
             }
         }

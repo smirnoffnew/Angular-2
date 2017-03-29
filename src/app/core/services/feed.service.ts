@@ -7,8 +7,8 @@ import { ReplaySubject, Observable, Subject } from 'rxjs/Rx';
 @Injectable()
 export class FeedService {
     public feedIdObject:any;
-    public getSingleFeedPost$ = new ReplaySubject(1);
-    public getFeedPosts$ = new ReplaySubject(1);
+    public getSingleFeedPost$ = new Subject();
+    public getFeedPosts$ = new Subject();
     constructor( private restangular:Restangular,
                  private authService:AuthService,
                  private alertService:AlertService) {

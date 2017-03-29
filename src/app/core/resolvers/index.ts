@@ -1,4 +1,4 @@
-import { ProfilesListResolverService } from './profiles.list.service';
+import { ProfilesListResolverService } from './profiles.list.resolver.service';
 import { CreateProfileResolverService } from './profile.create.resolver.service';
 import { ViewProfileResolverService } from './profile.view.resolver.service';
 import { EditProfileResolverService } from './profile.edit.resolver.service';
