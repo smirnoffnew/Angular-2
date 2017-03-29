@@ -2,13 +2,17 @@ import { NgModule } from '@angular/core';
 import { DatepickerModule } from 'angular2-material-datepicker';
 import { APP_PIPES_PROVIDERS } from './pipes/index';
 import { MaterialModule } from '@angular/material';
+import { ImageCropperComponent } from 'ng2-img-cropper';
 
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 
 @NgModule({
-    declarations: [ ...APP_PIPES_PROVIDERS  ],
+    declarations: [
+        ...APP_PIPES_PROVIDERS,
+        ImageCropperComponent
+    ],
     imports: [
         DatepickerModule,
         MaterialModule,
@@ -24,9 +28,10 @@ import { FormsModule } from "@angular/forms";
 
         CommonModule,
         RouterModule,
-        FormsModule
-    ]
+        FormsModule,
 
+        ImageCropperComponent
+    ]
 
 })
 export class AppSharedModule { }

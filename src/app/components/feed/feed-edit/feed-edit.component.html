@@ -1,0 +1,35 @@
+<md-card class="card">
+  <md-card-title class="center">Create post</md-card-title>
+  <md-card-content>
+    <form name="postForm" (ngSubmit)="savePost();" #postForm="ngForm">
+
+      <div class="center">
+        <md-input-container>
+          <input mdInput
+                 name="title"
+                 placeholder="title"
+                 [(ngModel)]="editablePost.title"
+                 #title="ngModel">
+        </md-input-container>
+      </div>
+
+      <div class="center">
+        <div class="file-upload">
+          <span class="text">upload</span>
+          <input id="custom-input" type="file" (change)="fileChangeListener(false, $event)">
+        </div>
+        <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+        <br>
+        <span class="result rounded" *ngIf="data.image" >
+          <img [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+        </span>
+      </div>
+
+      <div class="center" style="margin-top: 20px;">
+        <button md-button md-raised-button type="submit" color="warn">Save</button>
+      </div>
+    </form>
+
+  </md-card-content>
+</md-card>
+

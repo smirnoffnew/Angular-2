@@ -1,0 +1,32 @@
+<md-card class="card">
+  <md-card-title class="center">Create post</md-card-title>
+  <md-card-content>
+    <form name="postForm" (ngSubmit)="savePost(postForm);" #postForm="ngForm">
+
+      <div class="center">
+        <md-input-container>
+          <input mdInput
+                 name="title"
+                 placeholder="title"
+                 [(ngModel)]="newPost.title"
+                 #title="ngModel">
+        </md-input-container>
+      </div>
+
+      <div class="center image-crop-container" >
+        <img-cropper [image]="data" [settings]="cropperSettings" (onCrop)="cropped($event)"></img-cropper>
+        <span class="result" *ngIf="data.image" >
+        <img [src]="data.image"
+             [width]="croppedWidth"
+             [height]="croppedHeight">
+        </span>
+      </div>
+
+      <div class="center" style="margin-top: 20px;">
+        <button md-button md-raised-button type="submit" color="warn">Save</button>
+      </div>
+    </form>
+
+  </md-card-content>
+</md-card>
+

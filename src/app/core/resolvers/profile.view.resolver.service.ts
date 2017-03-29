@@ -3,6 +3,7 @@ import { Router, Resolve } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
 import { AuthService } from '../services/auth.service';
 import { ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import { AlertService } from '../services/alert.service';
 
 @Injectable()
 export class ViewProfileResolverService implements Resolve<any> {
@@ -11,7 +12,8 @@ export class ViewProfileResolverService implements Resolve<any> {
 
   constructor(private authService:AuthService,
               private profileService:ProfileService,
-              private router: Router)
+              private router: Router,
+              private alertService:AlertService)
   {
     this.authService.currentUser$.subscribe(
       (data)=>{
@@ -31,7 +33,9 @@ export class ViewProfileResolverService implements Resolve<any> {
               (response)=>{
                   this.profileService.getProfile$.next(response);
               },
-              ()=>{ console.log('neudacha'); }
+              ( error )=>{
+                  this.alertService.error(error.data.error.message);
+              }
           );
 
       }

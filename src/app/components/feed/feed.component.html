@@ -1,4 +1,24 @@
-<md-card>
-  <md-card-title>Feed Page</md-card-title>
-  <md-card-content> no content now </md-card-content>
+<md-card class="center">
+  <md-card-actions>
+    <a md-raised-button [routerLink]="['/feed/create-post']" color="accent">Create new post</a>
+  </md-card-actions>
 </md-card>
+
+<md-card *ngFor="let post of posts" class="card center">
+  <md-card-header class="feed-card">
+    <md-card-title>{{post.id}}</md-card-title>
+  </md-card-header>
+  <p>
+    <img [src]="post.image">
+  </p>
+  <md-card-content>
+    <p>
+      {{post.title}}
+    </p>
+  </md-card-content>
+  <md-card-actions>
+    <button md-button md-raised-button [routerLink]="['/feed/edit-post/' + post.id]">EDIT</button>
+    <button md-button md-raised-button (click)="remove(post.id)">DELETE</button>
+  </md-card-actions>
+</md-card>
+

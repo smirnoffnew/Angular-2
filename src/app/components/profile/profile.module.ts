@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { AppSharedModule } from '../../shared/shared.module';
-import { ImageCropperComponent } from 'ng2-img-cropper';
 import { routing } from './profile.routing';
 
 import { ProfileComponent } from './profile.component';
@@ -11,7 +10,6 @@ import { ProfileEditComponent } from './profile-edit/profile-edit.component';
 
 @NgModule({
     declarations: [
-        ImageCropperComponent,
         ProfileComponent,
         ProfilesListComponent,
         ProfileCreateComponent,

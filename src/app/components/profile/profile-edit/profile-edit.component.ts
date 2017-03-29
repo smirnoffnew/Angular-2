@@ -19,14 +19,18 @@ import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper'
   styleUrls: ['profile-edit.component.css']
 })
 export class ProfileEditComponent implements OnInit {
+
+  private subscribers:any = {};
   private profile:any = {};
   private user:any = {};
   private data:any = {};
   private cropperSettings:CropperSettings;
   private croppedWidth:number;
   private croppedHeight:number;
+  private profileSubscription: any;
 
   @ViewChild('cropper', undefined) cropper:ImageCropperComponent;
+
 
   constructor(private profileService:ProfileService,
               private alertService:AlertService,
@@ -74,7 +78,7 @@ export class ProfileEditComponent implements OnInit {
     }
 
   addSubscribers() {
-    this.profileService.getProfile$.combineLatest(
+    this.profileSubscription = this.profileService.getProfile$.combineLatest(
         this.authService.currentUser$, (profile:any, user:any) => {
           return {profile:profile, user:user }
         }
@@ -121,4 +125,13 @@ export class ProfileEditComponent implements OnInit {
       }
     );
   }
+
+    ngOnDestroy() {
+        for (let property in this.subscribers) {
+            if ( (typeof this.subscribers[property] !== 'undefined') && (this.subscribers[property] !== null) ) {
+                this.subscribers[property].unsubscribe();
+            }
+        }
+    }
+
 }

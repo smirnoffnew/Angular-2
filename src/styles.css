@@ -76,3 +76,8 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.feed-card > .mat-card-header-text {
+    margin-right: auto;
+    margin-left: auto;
+}

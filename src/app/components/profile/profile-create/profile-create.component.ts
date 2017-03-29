@@ -24,6 +24,7 @@ export class ProfileCreateComponent implements OnInit {
   private cropperSettings:CropperSettings;
   private croppedWidth:number;
   private croppedHeight:number;
+  private profileSubscription: any;
 
   constructor(private profileService:ProfileService,
               private authService:AuthService,
@@ -66,7 +67,7 @@ export class ProfileCreateComponent implements OnInit {
   }
 
   addSubscribers() {
-    this.profileService.getProfile$.combineLatest(
+      this.profileSubscription = this.profileService.getProfile$.combineLatest(
         this.authService.currentUser$, (profile:any, user:any) => {
           return {profile:profile, user:user }
         }

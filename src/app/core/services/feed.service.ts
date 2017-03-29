@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { Restangular } from 'ng2-restangular';
 import { AuthService } from './auth.service';
 import { AlertService } from './alert.service';
-import { ReplaySubject, Observable } from 'rxjs/Rx';
+import { ReplaySubject, Observable, Subject } from 'rxjs/Rx';
 
 @Injectable()
 export class FeedService {
     public feedIdObject:any;
+    public getSingleFeedPost$ = new ReplaySubject(1);
+    public getFeedPosts$ = new ReplaySubject(1);
     constructor( private restangular:Restangular,
                  private authService:AuthService,
                  private alertService:AlertService) {
@@ -32,11 +34,29 @@ export class FeedService {
             })
     };
 
-    getFeedPost():Observable<any>{
+    getFeedPosts():Observable<any>{
         return this.getFeedId().switchMap( (feedIdObject) => {
             return this.restangular.one('feeds', feedIdObject.id).one('posts').get();
         });
+    };
+
+
+    getSingleFeedPost( postId ):Observable<any>{
+        return this.getFeedId().switchMap( (feedIdObject) => {
+            return this.restangular.one('feeds', feedIdObject.id).one('posts', postId).get();
+        });
     }
 
+    saveFeedPost( postObject ):Observable<any>{
+        return this.getFeedId().switchMap( (feedIdObject) => {
+            return this.restangular.one('feeds', feedIdObject.id).all('posts').post( postObject );
+        });
+    }
+
+    removeFeedPost( postId ):Observable<any>{
+        return this.getFeedId().switchMap( (feedIdObject) => {
+            return this.restangular.one('feeds', feedIdObject.id).one('posts', postId).remove();
+        });
+    }
 
 }

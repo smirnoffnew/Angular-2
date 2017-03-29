@@ -78,10 +78,12 @@ export class AuthService {
         return Observable.of(false);
       }
     })
-    .map( (data) => {
+    .map( (data:any) => {
       if( data ) {
-        this.currentUser = data;
-        this.currentUser$.next(data);
+        if( this.currentUser.username !== data.username) {
+          this.currentUser = data;
+          this.currentUser$.next(data);
+        }
         return true;
       } else {
         return false;
