@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
+
 import { UserComponent } from './user.component';
 import { AppSharedModule } from '../../shared/shared.module';
 import { routing } from './user.routing';
+
 
 @NgModule({
     declarations: [ UserComponent ],
@@ -11,4 +13,5 @@ import { routing } from './user.routing';
     ],
     providers: []
 })
+
 export class UserModule {}

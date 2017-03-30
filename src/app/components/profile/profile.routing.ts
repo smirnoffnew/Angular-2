@@ -1,4 +1,3 @@
-import { AuthGuard } from '../../auth.guard.service';
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -12,6 +11,8 @@ import { ViewProfileResolverService } from '../../core/resolvers/profile.view.re
 import { ProfilesListResolverService } from '../../core/resolvers/profiles.list.resolver.service';
 import { EditProfileResolverService } from '../../core/resolvers/profile.edit.resolver.service';
 import { CreateProfileResolverService } from '../../core/resolvers/profile.create.resolver.service';
+
+import { AuthGuard } from '../../auth.guard.service';
 
 export const routs = [
     {

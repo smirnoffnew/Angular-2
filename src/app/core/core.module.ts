@@ -56,4 +56,5 @@ export class MyAuthConfig extends CustomConfig {
         AuthGuard,
     ]
 })
+
 export class CoreModule {}

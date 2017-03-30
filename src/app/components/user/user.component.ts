@@ -6,9 +6,14 @@ import { AuthService } from '../../core/services/auth.service';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
+
 export class UserComponent implements OnInit {
+
   private asyncUser:any;
-  constructor(private authService:AuthService) { }
+
+  constructor(private authService:AuthService) {
+  }
+
   ngOnInit(): void {
     this.asyncUser = this.authService.currentUser$;
   }
