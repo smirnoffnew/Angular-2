@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../core/services/auth.service';
-import {TokenService} from '../../core/services/token.service';
 
 
 @Component({
@@ -13,8 +12,7 @@ export class SignInComponent implements OnInit {
 
     model: any = {};
 
-    constructor( private authService: AuthService,
-                 private tokenService: TokenService) {
+    constructor( private authService: AuthService ) {
     }
 
     ngOnInit() {

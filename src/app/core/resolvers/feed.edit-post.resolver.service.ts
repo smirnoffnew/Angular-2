@@ -20,7 +20,6 @@ export class FeedEditPostResolverService implements Resolve<any> {
             this.feedService.getSingleFeedPost( route.params['postId'] ).subscribe(
                 (response)=>{
                     this.feedService.getSingleFeedPost$.next(response);
-
                 },
                 (error)=>{
                     this.alertService.error(error.data.error.message);

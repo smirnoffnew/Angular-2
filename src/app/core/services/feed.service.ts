@@ -6,18 +6,18 @@ import { ReplaySubject, Observable, Subject } from 'rxjs/Rx';
 
 @Injectable()
 export class FeedService {
+
     public feedIdObject:any;
     public getSingleFeedPost$ = new Subject();
     public getFeedPosts$ = new Subject();
+
     constructor( private restangular:Restangular,
                  private authService:AuthService,
                  private alertService:AlertService) {
-
-
     }
 
     getFeedId():Observable<any> {
-        return this.authService.currentUser$
+        return this.authService.currentUser$.take(1)
             .switchMap( (user:any) => {
                 if( this.feedIdObject ) {
                     return Observable.of( this.feedIdObject )
