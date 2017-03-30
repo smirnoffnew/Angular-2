@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 
-import {ProfileService} from '../../../core/services/profile.service';
 import {AlertService} from '../../../core/services/alert.service';
 import {AuthService} from '../../../core/services/auth.service';
+import {ProfileService} from '../../../core/services/profile.service';
 import {ProfileModel} from '../../../models/ProfileModel';
 import {ImageCropperComponent, CropperSettings, Bounds} from 'ng2-img-cropper';
 
@@ -60,7 +60,7 @@ export class ProfileEditComponent implements OnInit {
                     return {profile: profile, user: user}
                 })
             .subscribe(
-                (result) => { debugger;
+                (result) => {
                     //when user haven't profile
                     if (!result.profile.hasOwnProperty('data') && this.router.url == '/profile/' + result.user.username + '/edit') {
                         this.router.navigate(['/profile/' + result.user.username]);
@@ -119,10 +119,9 @@ export class ProfileEditComponent implements OnInit {
         this.subscribers.savedProfileSubscription = this.profileService.save(profileObject, this.profile.data.id)
             .subscribe(
                 (data) => {
-                    debugger;
-                    this.alertService.success('Successfully saved');
+                    this.alertService.success('Your profile successfully saved');
                     this.router.navigate(['profile/' + this.user.username]);
-                    this.profileService.selfProfileAlreadyGetting.data = profileObject;
+                    this.profileService.selfProfileAlreadyGetting.data = new ProfileModel(data);
                 },
                 (error) => {
                     this.alertService.error(error.data.error.message);

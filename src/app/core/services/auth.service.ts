@@ -1,115 +1,105 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from "rxjs/Rx";
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/take';
-import { Restangular } from 'ng2-restangular';
-import { TokenService } from './token.service';
-import { AlertService } from './alert.service';
-import { UserService } from './user.service';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {Observable, ReplaySubject} from "rxjs/Rx";
+import {Restangular} from 'ng2-restangular';
+
+import {AlertService} from './alert.service';
+import {LogOutService} from './logout.service';
+import {TokenService} from './token.service';
+import {UserService} from './user.service';
 
 @Injectable()
 export class AuthService {
 
-  public currentUser:any;
-  public currentUser$;
+    public currentUser: any = false;
+    public currentUser$ = new ReplaySubject(1);
+    public subscribers:any = {};
 
-  constructor(private restangular:Restangular,
-              private tokenService:TokenService,
-              private alertService:AlertService,
-              private userService:UserService,
-              private router:Router) {
+    constructor( private router: Router,
+                 private restangular: Restangular,
+                 private alertService: AlertService,
+                 private logOutService:LogOutService,
+                 private tokenService: TokenService,
+                 private userService: UserService) {
+    }
 
-    this.currentUser = false;
-    this.currentUser$ = new ReplaySubject();
-  }
+    Registration(dataForCreateUser) {
+        this.userService.createUser(dataForCreateUser).subscribe(
+            () => {
+                this.alertService.success('Registration successful', true);
+                this.router.navigate(['/feed']);
+            },
+            (error) => {
+                this.alertService.error(error.data.error.message);
+            }
+        );
+    }
 
-  Registration(dataForCreateUser) {
-    this.userService.createUser( dataForCreateUser ).subscribe(
-        () => {
-          this.alertService.success('Registration successful', true);
-          this.router.navigate(['/feed']);
-        },
-        (error) => {
-          this.alertService.error(error.data.error.message);
-        }
-    );
-  }
+    Logging(email: string, pasword: string) {
+        this.userService.authenticateUser(email, pasword).subscribe(
+            () => {
+                this.alertService.success('Authentication successful', true);
+                this.router.navigate(['/feed']);
+            },
+            (error) => {
+                this.alertService.error(error.data.error.message);
+            }
+        );
+    }
 
-  Logging(email:string, pasword:string) {
-    this.userService.authenticateUser(email, pasword).subscribe(
-        () => {
-          this.alertService.success('Authentication successful', true);
-          this.router.navigate(['/feed']);
-        },
-        (error) => {
-          this.alertService.error(error.data.error.message);
-        }
-    );
-  }
+    SocialNetworkAuth(socialNetwork: string) {
+        this.userService.socialNetworkAuthenticateUser(socialNetwork)
+            .subscribe(
+                () => {
+                    this.alertService.success('Google Authorization successful', true);
+                    this.router.navigate(['/feed']);
+                },
+                (error) => {
+                    this.alertService.error(error.data.error.message);
+                }
+            );
+    }
 
-  LoggOuting(){
-    this.tokenService.remove();
-    this.router.navigate(['/sign-in']);
-    this.alertService.success('You left site Successfully');
-  }
+    LogOuting() {
+        this.currentUser = false;
+        this.logOutService.logOut();
+    }
 
-  isLoggedIn() {
+    isLoggedIn() {
 
-    this.userService.currentUser$.subscribe(
-        (user) => {
-          this.currentUser = user;
-        }
-    );
+        //save user into auth when application start from login page or registration page
+        this.subscribers.userServiceSubscription = this.userService.currentUser$.subscribe(
+            (user) => {
+                this.currentUser = user;
+                this.subscribers.userServiceSubscription.unsubscribe();
+            }
+        );
 
-
-    let returnedObservable$ = Observable.of( this.tokenService.isTokenExist() )
-    .switchMap(data => {
-      if ( data ) {
-        if ( this.currentUser ) {
-          return Observable.of( this.currentUser );
-        } else {
-          return this.restangular.one('tokens', this.tokenService.get()).one('user').get()
-        }
-      } else {
-        return Observable.of(false);
-      }
-    })
-    .map( (data:any) => {
-      if( data ) {
-        if( this.currentUser.username !== data.username) {
-          this.currentUser = data;
-          this.currentUser$.next(data);
-        }
-        return true;
-      } else {
-        return false;
-      }
-    })
-    .catch((error) => {
-      this.alertService.error(error.data.error.message);
-      return Observable.of(false);
-    });
-    return returnedObservable$;
-  }
-
-  getUser(){
-    return this.restangular.one('tokens', this.tokenService.get()).one('user').get()
-  }
-
-  SocialNetworkAuth(socialNetwork:string) {
-    this.userService.socialNetworkAuthenticateUser(socialNetwork)
-    .subscribe(
-      () => {
-        this.alertService.success('Google Authorization successful', true);
-        this.router.navigate(['/feed']);
-      },
-      (error) => {
-        this.alertService.error(error.data.error.message);
-      }
-    );
-  }
+        let returnedObservable$ = Observable.of(this.tokenService.isTokenExist())
+            .switchMap(data => {
+                if (data) {
+                    if (this.currentUser) {
+                        return Observable.of(this.currentUser);
+                    } else {
+                        return this.restangular.one('tokens', this.tokenService.get()).one('user').get()
+                    }
+                } else {
+                    return  Observable.of(data);
+                }
+            })
+            .map((data: any) => {
+                if (data) {
+                    this.currentUser = data;
+                    this.currentUser$.next(data);
+                    return true;
+                } else {
+                    return data;
+                }
+            })
+            .catch((error) => {
+                this.alertService.error(error.data.error.message);
+                return Observable.of(false);
+            });
+        return returnedObservable$;
+    }
 }

@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
+import 'hammerjs'
 
-// my modules
-import { CoreModule } from './core/core.module';
 import { AppSharedModule } from './shared/shared.module';
+import { CoreModule } from './core/core.module';
 import { routing } from './routes';
 
-//components
-import { AppComponent } from './app.component';
 import { AlertComponent } from './components/alert/alert.component';
+import { AppComponent } from './app.component';
+
 
 @NgModule({
     declarations: [
-        AppComponent,
         AlertComponent,
+        AppComponent
     ],
     imports: [
-        CoreModule,
         AppSharedModule,
+        CoreModule,
         routing,
     ],
     providers: [],

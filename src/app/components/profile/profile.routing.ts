@@ -34,9 +34,9 @@ export const routs = [
                     {
                         path: 'create',
                         component: ProfileCreateComponent,
-                        // resolve: {
-                        //     profile: CreateProfileResolverService
-                        // },
+                        resolve: {
+                            profile: CreateProfileResolverService
+                        },
                     },
                     {
                         path: '',

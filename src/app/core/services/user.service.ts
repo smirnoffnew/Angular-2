@@ -1,32 +1,32 @@
 import { Injectable } from '@angular/core';
-import { UserModel } from '../../models/UserModel';
+import { Observable, ReplaySubject, Subject } from 'rxjs/Rx';
+
 import { TokenModel } from '../../models/TokenModel';
-import { Observable, ReplaySubject } from 'rxjs/Rx';
-import { TokenService } from './token.service';
-import { Restangular } from 'ng2-restangular';
-import { AuthService } from 'ng2-ui-auth';
+import { UserModel } from '../../models/UserModel';
+
 import { AlertService } from './alert.service';
-import 'rxjs/Rx';
+import { AuthService } from 'ng2-ui-auth';
+import { TokenService } from './token.service';
+
+import { Restangular } from 'ng2-restangular';
 import * as _ from 'lodash';
 
 @Injectable()
 export class UserService {
-  public currentUser$;
-  public currentToken$;
+
+  public currentUser$ =  new Subject();
+  public currentToken$ =  new ReplaySubject(1);
   public currentFeed$;
+
   constructor(private restangular:Restangular,
               private tokenService:TokenService,
               private socialNetworkService:AuthService,
-              private alertService:AlertService)
-  {
-    this.currentUser$ = new ReplaySubject(1);
-    this.currentToken$ = new ReplaySubject();
+              private alertService:AlertService) {
   }
   
   createUser(dataForCreateUser) {
     return this.restangular.all('clients').post(dataForCreateUser)
     .switchMap(data => {
-      this.currentFeed$ = this.restangular.one('clients', data.id).one('feed').get();
       this.currentUser$.next(new UserModel(data));
       return data.all('accessTokens').getList();
     })
@@ -57,7 +57,6 @@ export class UserService {
       return Observable.throw(err);
     })
     .map(user => {
-      this.currentFeed$ = this.restangular.one('clients', user.id).one('feed').get();
       this.currentUser$.next( new UserModel(user) );
       return user;
     })

@@ -25,28 +25,27 @@ export class ViewProfileResolverService implements Resolve<any> {
     )
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) { debugger;
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
       //for ability to redirect your profile when profile doesn't exist
       if (route.params['username']===undefined) {
-        this.router.navigate(['/profile/' + this.user.username]); }
-
-
-      if ( route.params['username'] == this.user.username && this.profileService.selfProfileAlreadyGetting) {
-          this.profileService.getProfileForView$.next(this.profileService.selfProfileAlreadyGetting);
+        this.router.navigate(['/profile/' + this.user.username]);
       } else {
-          this.profileService.get( route.params['username'] ).subscribe(
-              (response)=>{                                               debugger;
-                  this.profileService.getProfileForView$.next(response);
-                  if (route.params['username'] == this.user.username){
-                      this.profileService.getProfileForEdit$.next(response);
-                      this.profileService.selfProfileAlreadyGetting = response;
+          if ( route.params['username'] == this.user.username && this.profileService.selfProfileAlreadyGetting) {
+              this.profileService.getProfileForView$.next(this.profileService.selfProfileAlreadyGetting);
+          } else {
+              this.profileService.get( route.params['username'] ).subscribe(
+                  (response)=>{
+                      this.profileService.getProfileForView$.next(response);
+                      if (route.params['username'] == this.user.username){
+                          this.profileService.getProfileForEdit$.next(response);
+                          this.profileService.selfProfileAlreadyGetting = response;
+                      }
+                  },
+                  ( error )=>{
+                      this.alertService.error(error.data.error.message);
                   }
-              },
-              ( error )=>{
-                  this.alertService.error(error.data.error.message);
-              }
-          );
+              );
+          }
       }
-
   }
 }

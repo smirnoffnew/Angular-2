@@ -24,26 +24,25 @@ export class EditProfileResolverService implements Resolve<any> {
         )
     }
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) { debugger;
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         //for ability to edit only your profile
         if (route.parent.params['username'] !== this.user.username) {
             this.router.navigate(['profile/' + this.user.username + '/edit'])
-        }
-
-        if (this.profileService.selfProfileAlreadyGetting) {
-            this.profileService.getProfileForEdit$.next(this.profileService.selfProfileAlreadyGetting);
         } else {
-            this.profileService.get( this.user.username )
-                .subscribe(
-                    (response) => { debugger;
-                        this.profileService.getProfileForEdit$.next(response);
-                        this.profileService.selfProfileAlreadyGetting = response;
-                    },
-                    (error) => {
-                        this.alertService.error(error.data.error.message);
-                    }
-                );
+            if (this.profileService.selfProfileAlreadyGetting) {
+                this.profileService.getProfileForEdit$.next(this.profileService.selfProfileAlreadyGetting);
+            } else {
+                this.profileService.get( this.user.username )
+                    .subscribe(
+                        (response) => {
+                            this.profileService.getProfileForEdit$.next(response);
+                            this.profileService.selfProfileAlreadyGetting = response;
+                        },
+                        (error) => {
+                            this.alertService.error(error.data.error.message);
+                        }
+                    );
+            }
         }
-
     }
 }

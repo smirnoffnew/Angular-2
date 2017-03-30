@@ -1,15 +1,21 @@
+import { AlertService } from './alert.service';
+import { AuthService } from './auth.service';
+import { FeedService } from './feed.service';
+import { LogOutService } from './logout.service';
+import { ProfileService } from './profile.service';
 import { TokenService } from './token.service';
 import { UserService } from './user.service';
-import { ProfileService } from './profile.service';
-import { AuthService } from './auth.service';
-import { AlertService } from './alert.service';
-import { FeedService } from './feed.service';
+
+
+
+
 
 export const APP_SERVICE_PROVIDERS = [
-    TokenService,
-    UserService,
-    ProfileService,
     AuthService,
     AlertService,
-    FeedService
+    FeedService,
+    LogOutService,
+    ProfileService,
+    TokenService,
+    UserService
 ];

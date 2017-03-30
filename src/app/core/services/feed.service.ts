@@ -18,7 +18,7 @@ export class FeedService {
 
     getFeedId():Observable<any> {
         return this.authService.currentUser$
-            .switchMap( (user) => {
+            .switchMap( (user:any) => {
                 if( this.feedIdObject ) {
                     return Observable.of( this.feedIdObject )
                 } else {
@@ -27,6 +27,7 @@ export class FeedService {
             })
             .catch( (error) => {
                 this.alertService.error(error.data.error.message);
+                return Observable.throw(error);
             })
             .map( (feedIdObject) => {
                 this.feedIdObject = feedIdObject;
