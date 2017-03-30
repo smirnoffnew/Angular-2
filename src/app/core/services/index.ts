@@ -7,9 +7,6 @@ import { TokenService } from './token.service';
 import { UserService } from './user.service';
 
 
-
-
-
 export const APP_SERVICE_PROVIDERS = [
     AuthService,
     AlertService,

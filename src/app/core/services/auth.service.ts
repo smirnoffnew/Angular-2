@@ -4,7 +4,6 @@ import {Observable, ReplaySubject} from "rxjs/Rx";
 import {Restangular} from 'ng2-restangular';
 
 import {AlertService} from './alert.service';
-import {LogOutService} from './logout.service';
 import {TokenService} from './token.service';
 import {UserService} from './user.service';
 
@@ -18,7 +17,6 @@ export class AuthService {
     constructor( private router: Router,
                  private restangular: Restangular,
                  private alertService: AlertService,
-                 private logOutService:LogOutService,
                  private tokenService: TokenService,
                  private userService: UserService) {
     }
@@ -60,10 +58,6 @@ export class AuthService {
             );
     }
 
-    LogOuting() {
-        this.currentUser = false;
-        this.logOutService.logOut();
-    }
 
     isLoggedIn() {
 
