@@ -15,7 +15,7 @@ export class AlertService {
     this.subject.next({ type: 'success', text: message });
   }
 
-  error(message: string, keepAfterNavigationChange = false) { debugger;
+  error(message: string, keepAfterNavigationChange = false) {
     this.subject.next({ type: 'error', text: message });
   }
 

@@ -20,7 +20,7 @@ export class AlertComponent implements OnInit {
     ngOnInit() {
         this.subscribers.messageSubscription = this.alertService.getMessage()
             .subscribe(
-                (message) => { debugger;
+                (message) => {
                     if (message !== undefined) {
                         if (message.type == 'error') {
                             this.snackBar.open(message.text, message.type, {duration: 4000});

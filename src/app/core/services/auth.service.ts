@@ -41,7 +41,7 @@ export class AuthService {
                 this.alertService.success('Authentication successful', true);
                 this.router.navigate(['/feed']);
             },
-            (error) => { debugger;
+            (error) => {
                 this.alertService.error(error.data.error.message);
             }
         );
