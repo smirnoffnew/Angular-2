@@ -7,6 +7,7 @@ import {AlertService} from '../../core/services/alert.service';
     templateUrl: './alert.component.html',
     styleUrls: ['./alert.component.css']
 })
+
 export class AlertComponent implements OnInit {
 
     message: any;
@@ -17,12 +18,9 @@ export class AlertComponent implements OnInit {
     }
 
     ngOnInit() {
-    }
-
-    addSubscribers() {
         this.subscribers.messageSubscription = this.alertService.getMessage()
             .subscribe(
-                (message) => {
+                (message) => { debugger;
                     if (message !== undefined) {
                         if (message.type == 'error') {
                             this.snackBar.open(message.text, message.type, {duration: 4000});
