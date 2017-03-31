@@ -1,4 +1,17 @@
 <md-card *ngFor="let profile of (profiles | async)" class="card">
+
+    <a class="navbarLink" [routerLink]="['.']"
+       md-raised-button
+       color="accent"
+       routerLinkActive="active"
+       (click)="changeUser(profile.clientId)" > Change User
+    </a>
+
+    <div class="center">
+        <img *ngIf = "profile.image" class="image-style" src="{{ profile.image }}">
+        <h3 *ngIf = "!profile.image">No photo</h3>
+    </div>
+
     <md-card-content>
       <md-list>
         <md-list-item *ngFor="let item of ( profile | keyAndValueOfObject)">
@@ -8,4 +21,5 @@
         </md-list-item>
       </md-list>
     </md-card-content>
+
 </md-card>
