@@ -12,7 +12,7 @@ import { AppComponent } from './app.component';
 @NgModule({
     declarations: [
         AlertComponent,
-        AppComponent
+        AppComponent,
     ],
     imports: [
         AppSharedModule,

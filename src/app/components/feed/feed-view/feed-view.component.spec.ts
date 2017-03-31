@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FeedEditComponent } from './feed-edit.component';
+import { FeedViewComponent } from './feed-view.component';
 
-describe('FeedEditComponent', () => {
-  let component: FeedEditComponent;
-  let fixture: ComponentFixture<FeedEditComponent>;
+describe('FeedViewComponent', () => {
+  let component: FeedViewComponent;
+  let fixture: ComponentFixture<FeedViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FeedEditComponent ]
+      declarations: [ FeedViewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FeedEditComponent);
+    fixture = TestBed.createComponent(FeedViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

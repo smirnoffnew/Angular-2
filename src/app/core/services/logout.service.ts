@@ -21,7 +21,7 @@ export class LogOutService {
     LogOuting(){
         this.authService.currentUser = false;
         this.profileService.selfProfileAlreadyGetting = false;
-        this.feedService.feedIdObject = false ;
+        this.feedService.selfFeedIdObject = false ;
         this.tokenService.remove();
         this.router.navigate(['/sign-in']);
         this.alertService.success('You left site Successfully');

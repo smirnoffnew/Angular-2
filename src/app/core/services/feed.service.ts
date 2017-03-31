@@ -1,63 +1,74 @@
-import { Injectable } from '@angular/core';
-import { Restangular } from 'ng2-restangular';
-import { AuthService } from './auth.service';
-import { AlertService } from './alert.service';
-import { ReplaySubject, Observable, Subject } from 'rxjs/Rx';
+import {Injectable} from '@angular/core';
+import {Restangular} from 'ng2-restangular';
+import {Observable, Subject} from 'rxjs/Rx';
+
+import {AlertService} from './alert.service';
+import {AuthService} from './auth.service';
+
 
 @Injectable()
 export class FeedService {
 
-    public feedIdObject:any;
-    public getSingleFeedPost$ = new Subject();
+    public selfFeedIdObject: any = false;
+    public selfFeedIdObject$: any = new Subject();
     public getFeedPosts$ = new Subject();
 
-    constructor( private restangular:Restangular,
-                 private authService:AuthService,
-                 private alertService:AlertService) {
-    }
+    constructor(private restangular: Restangular,
+                private authService: AuthService,
+                private alertService: AlertService) {
 
-    getFeedId():Observable<any> {
-        return this.authService.currentUser$.take(1)
-            .switchMap( (user:any) => {
-                if( this.feedIdObject ) {
-                    return Observable.of( this.feedIdObject )
+        this.selfFeedIdObject$ = this.authService.currentUser$.take(1)
+
+            .switchMap((user: any) => {
+                if (this.selfFeedIdObject) {
+                    return Observable.of(this.selfFeedIdObject)
                 } else {
                     return this.restangular.one('clients', user.id).one('feeds').get();
                 }
             })
-            .catch( (error) => {
+
+            .catch((error) => {
                 this.alertService.error(error.data.error.message);
                 return Observable.throw(error);
             })
-            .map( (feedIdObject) => {
-                this.feedIdObject = feedIdObject;
+
+            .map((feedIdObject) => {
+                this.selfFeedIdObject = feedIdObject;
                 return feedIdObject;
+            });
+    }
+
+    getFeedPosts(feedId?): Observable<any> {
+        return this.selfFeedIdObject$.switchMap(
+            (feedIdObject) => {
+                if (feedId) {
+                    return this.restangular.one('feeds', feedId).one('posts').get();
+                } else {
+                    return this.restangular.one('feeds', feedIdObject.id).one('posts').get();
+                }
+            }
+        );
+    };
+
+    getSelfFeedIdObject() {
+        return this.selfFeedIdObject$ = this.authService.currentUser$.take(1)
+
+            .switchMap((user: any) => {
+                if (this.selfFeedIdObject) {
+                    return Observable.of(this.selfFeedIdObject)
+                } else {
+                    return this.restangular.one('clients', user.id).one('feeds').get();
+                }
             })
-    };
 
-    getFeedPosts():Observable<any>{
-        return this.getFeedId().switchMap( (feedIdObject) => {
-            return this.restangular.one('feeds', feedIdObject.id).one('posts').get();
-        });
-    };
+            .catch((error) => {
+                this.alertService.error(error.data.error.message);
+                return Observable.throw(error);
+            })
 
-
-    getSingleFeedPost( postId ):Observable<any>{
-        return this.getFeedId().switchMap( (feedIdObject) => {
-            return this.restangular.one('feeds', feedIdObject.id).one('posts', postId).get();
-        });
+            .map((feedIdObject) => {
+                this.selfFeedIdObject = feedIdObject;
+                return feedIdObject;
+            });
     }
-
-    saveFeedPost( postObject ):Observable<any>{
-        return this.getFeedId().switchMap( (feedIdObject) => {
-            return this.restangular.one('feeds', feedIdObject.id).all('posts').post( postObject );
-        });
-    }
-
-    removeFeedPost( postId ):Observable<any>{
-        return this.getFeedId().switchMap( (feedIdObject) => {
-            return this.restangular.one('feeds', feedIdObject.id).one('posts', postId).remove();
-        });
-    }
-
 }

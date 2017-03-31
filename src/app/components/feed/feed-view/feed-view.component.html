@@ -1,0 +1,26 @@
+<md-card class="center">
+  <md-card-actions>
+    <a md-raised-button [routerLink]="['/feed/' +feedService.selfFeedIdObject.id+ '/post']" color="accent">Create new post</a>
+  </md-card-actions>
+</md-card>
+
+<md-card *ngFor="let post of posts" class="card center">
+  <md-card-header class="feed-card">
+    <md-card-title>
+      <a [routerLink]="['/feed/' + post.feedId + '/post/' + post.id]" >{{post.id}}</a>
+    </md-card-title>
+  </md-card-header>
+  <p>
+    <img [src]="post.image">
+  </p>
+  <md-card-content>
+    <p>
+      {{post.title}}
+    </p>
+  </md-card-content>
+  <md-card-actions>
+    <button md-button md-raised-button [routerLink]="['/feed/' + post.feedId + '/post/' + post.id + '/edit']">EDIT</button>
+    <button md-button md-raised-button (click)="remove(post.feedId, post.id)">DELETE</button>
+  </md-card-actions>
+</md-card>
+

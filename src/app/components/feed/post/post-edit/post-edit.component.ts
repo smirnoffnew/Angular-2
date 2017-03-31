@@ -1,15 +1,17 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ImageCropperComponent, CropperSettings, Bounds} from 'ng2-img-cropper';
-import {FeedService} from '../../../core/services/feed.service';
-import {AlertService} from '../../../core/services/alert.service';
+import {FeedService} from '../../../../core/services/feed.service';
+import {PostService} from '../../../../core/services/post.service';
+import {AlertService} from '../../../../core/services/alert.service';
 import {ActivatedRoute, Router}   from '@angular/router';
 
+
 @Component({
-    selector: 'app-feed-edit',
-    templateUrl: 'feed-edit.component.html',
-    styleUrls: ['feed-edit.component.css']
+    selector: 'app-post-edit',
+    templateUrl: 'post-edit.component.html',
+    styleUrls: ['post-edit.component.css']
 })
-export class FeedEditComponent implements OnInit {
+export class PostEditComponent implements OnInit {
 
     private cropperSettings: CropperSettings;
     private croppedWidth: number;
@@ -18,15 +20,14 @@ export class FeedEditComponent implements OnInit {
     private data: any = {};
     private subscribers: any = {};
     private routParams: any = {};
-    private noRunned: boolean = true;
-
 
     @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
 
     constructor(private feedService: FeedService,
                 private alertService: AlertService,
                 private activatedRoute: ActivatedRoute,
-                private router: Router) {
+                private router: Router,
+                private postService: PostService) {
 
         this.cropperSettings = new CropperSettings();
         this.cropperSettings.width = 200;
@@ -56,12 +57,10 @@ export class FeedEditComponent implements OnInit {
     }
 
     ngAfterViewInit() {
-        this.subscribers.postSubscribtion = this.feedService.getSingleFeedPost$.subscribe(
+        this.subscribers.postSubscribtion = this.postService.getSingleFeedPost$.subscribe(
             (post: any) => {
                 this.editablePost = post;
-                if (this.noRunned) {
-                    this.fileChangeListener(post.image);
-                }
+                this.fileChangeListener(post.image);
             }
         );
     }
@@ -72,7 +71,6 @@ export class FeedEditComponent implements OnInit {
     }
 
     fileChangeListener(base64, $event?) {
-        this.noRunned = false;
         let image: any = new Image();
         let that = this;
         if (base64) {

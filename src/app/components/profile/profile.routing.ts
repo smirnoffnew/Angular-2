@@ -18,7 +18,6 @@ export const routs = [
     {
         path: '',
         component: ProfileComponent,
-        resolve: {},
         canActivate: [AuthGuard],
         children: [
             {

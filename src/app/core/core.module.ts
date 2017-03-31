@@ -16,9 +16,9 @@ import {APP_RESOLVERS_PROVIDERS} from './resolvers/index';
 //other services
 import {CookieService} from 'angular2-cookie/services/cookies.service';
 import {RestangularModule} from 'ng2-restangular';
-export function RestangularConfigFactory (RestangularProvider,tokenService) {
+export function RestangularConfigFactory(RestangularProvider, tokenService) {
     RestangularProvider.setBaseUrl('http://kickstagram.2muchcoffee.com/api');
-    RestangularProvider.addFullRequestInterceptor((element, operation, path, url, headers, params)=> {
+    RestangularProvider.addFullRequestInterceptor((element, operation, path, url, headers, params) => {
         return {
             params: Object.assign({}, params, tokenService.isTokenExist() ? {access_token: tokenService.get()} : {}),
             headers: headers,
@@ -27,7 +27,7 @@ export function RestangularConfigFactory (RestangularProvider,tokenService) {
     });
 }
 
-import { Ng2UiAuthModule, CustomConfig } from 'ng2-ui-auth';
+import {Ng2UiAuthModule, CustomConfig} from 'ng2-ui-auth';
 export const GOOGLE_CLIENT_ID = '945919728141-s8e4e961ie6jgi5hbuuvedv7vo1u40n5.apps.googleusercontent.com';
 export const FACEBOOK_CLIENT_ID = '656768837864102';
 export class MyAuthConfig extends CustomConfig {
@@ -57,4 +57,5 @@ export class MyAuthConfig extends CustomConfig {
     ]
 })
 
-export class CoreModule {}
+export class CoreModule {
+}

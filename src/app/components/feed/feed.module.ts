@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
-import { FeedComponent } from './feed.component';
-import { FeedCreateComponent } from './feed-create/feed-create.component';
-import { FeedEditComponent } from './feed-edit/feed-edit.component';
 import { AppSharedModule } from '../../shared/shared.module';
 import { routing } from './feed.routing';
+
+import { FeedComponent } from './feed.component';
+import { FeedViewComponent } from "./feed-view/feed-view.component";
+
 
 @NgModule({
     declarations: [
         FeedComponent,
-        FeedCreateComponent,
-        FeedEditComponent
+        FeedViewComponent
     ],
     imports: [
         AppSharedModule,
