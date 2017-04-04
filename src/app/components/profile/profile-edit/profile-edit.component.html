@@ -1,4 +1,4 @@
-<md-card class="card">
+<md-card class="card" (scroll)="onScroll($event)">
   <md-card-title class="center">Edit profile</md-card-title>
   <md-card-content>
     <form name="profileForm" (ngSubmit)="saveProfile(profileForm);" #profileForm="ngForm">
@@ -77,10 +77,11 @@
       </div>
 
       <div class="center" style="margin-top: 20px;">
-        <button md-raised-button md-button type="submit" color="warn">Save</button>
-        <a md-raised-button color="accent" color="warn" [routerLink]="['/profile/' + user.username]">Cancel</a>
+        <button md-raised-button md-button type="submit" color="warn"
+                [disabled]="isClickedSave" (click)="isClickedSave = true">Save</button>
+        <a md-raised-button color="accent" color="warn" [routerLink]="['/profile/' + user.username]"
+           [disabled]="isClickedCancel" (click)="isClickedCancel = true" >Cancel</a>
       </div>
     </form>
-
   </md-card-content>
 </md-card>

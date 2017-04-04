@@ -1,6 +1,7 @@
 <md-card class="center">
   <md-card-actions>
-    <a md-raised-button [routerLink]="['/feed/' +feedService.selfFeedIdObject.id+ '/post']" color="accent">Create new post</a>
+    <a [disabled]="isClickedCreateNewPost" (click)="isClickedCreateNewPost = true"
+       md-raised-button [routerLink]="['/feed/' +feedService.selfFeedIdObject.id+ '/post']" color="accent">Create new post</a>
   </md-card-actions>
 </md-card>
 
@@ -19,8 +20,10 @@
     </p>
   </md-card-content>
   <md-card-actions>
-    <button md-button md-raised-button [routerLink]="['/feed/' + post.feedId + '/post/' + post.id + '/edit']">EDIT</button>
-    <button md-button md-raised-button (click)="remove(post.feedId, post.id)">DELETE</button>
+    <button [disabled]="isClickedEDIT" (click)="isClickedEDIT = true"
+            md-button md-raised-button [routerLink]="['/feed/' + post.feedId + '/post/' + post.id + '/edit']">EDIT</button>
+    <button [disabled]="isClickedDELETE" (click)="isClickedDELETE = true"
+            md-button md-raised-button (click)="remove(post.feedId, post.id)">DELETE</button>
   </md-card-actions>
 </md-card>
 

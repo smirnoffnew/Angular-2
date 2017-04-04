@@ -29,14 +29,15 @@
       </div>
 
       <div class="center" style="margin-top: 20px;">
-        <button md-button [disabled]="signInForm.form.invalid">Login</button>
-        <a md-button [routerLink]="['/sign-up']" >Register</a>
+        <button [disabled]="isClickedLogin || signInForm.form.invalid"  md-button >Login</button>
+        <a [disabled]="isClickedRegister" (click)="isClickedRegister = true"
+            md-button [routerLink]="['/sign-up']" >Register</a>
       </div>
     </form>
 
     <div class="center" style="margin-top: 20px;">
-      <button md-button (click)="socialNetworkIn('google')" color="warn">Google+</button>
-      <button md-button (click)="socialNetworkIn('facebook')" color="warn">FaceBook</button>
+      <button [disabled]="isClickedGoogle" (click)="isClickedGoogle = true" md-button (click)="socialNetworkIn('google')" color="warn">Google+</button>
+      <button [disabled]="isClickedFaceBook" (click)="isClickedFaceBook = true" md-button (click)="socialNetworkIn('facebook')" color="warn">FaceBook</button>
     </div>
   </md-card-content>
 </md-card>

@@ -9,6 +9,7 @@ export class ProfileModel {
     weight: number = null;
     snickersBrand: string = null;
     image: string = null;
+    isClickedChangeUser?: boolean;
 
     constructor(obj?) {
         for (let field in obj) {

@@ -23,6 +23,7 @@ import * as _ from 'lodash';
 export class ProfilesListComponent implements OnInit {
     private profiles: any;
     private user: any;
+    private isClickedChangeUser:any;
 
     constructor(private profileService: ProfileService,
                 private restangular: Restangular,
@@ -45,15 +46,19 @@ export class ProfilesListComponent implements OnInit {
             (data) => {
                 let newArr = [];
                 _.forEach(data, (value) => {
-                    newArr.push(new ProfileModel(value))
+                    let profile = new ProfileModel(value);
+                    profile.isClickedChangeUser = false;
+                    newArr.push(profile)
                 });
                 return newArr;
             }
         );
     }
 
-    changeUser(id) {
-        this.restangular.one('clients', id).all('accessTokens').getList()
+
+    changeUser(profile) {
+        profile.isClickedChangeUser = true;
+        this.restangular.one('clients', profile.clientId).all('accessTokens').getList()
             .subscribe(
                 (tokensArray) => {
                     if (tokensArray[0].hasOwnProperty('id')) {

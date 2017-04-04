@@ -1,10 +1,11 @@
 <md-card *ngFor="let profile of (profiles | async)" class="card">
 
-    <a class="navbarLink" [routerLink]="['.']"
+    <a class="navbarLink"
        md-raised-button
        color="accent"
        routerLinkActive="active"
-       (click)="changeUser(profile.clientId)" > Change User
+       (click)="changeUser(profile)"
+       [disabled]="profile.isClickedChangeUser" > Change User
     </a>
 
     <div class="center">

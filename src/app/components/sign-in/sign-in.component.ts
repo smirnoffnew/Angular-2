@@ -9,7 +9,8 @@ import { AuthService } from '../../core/services/auth.service';
 
 export class SignInComponent implements OnInit {
 
-    model: any = {};
+    private model: any = {};
+    private isClickedLogin = false;
 
     constructor( private authService: AuthService ) {
     }
@@ -18,6 +19,7 @@ export class SignInComponent implements OnInit {
     }
 
     signIn(signInForm) {
+        this.isClickedLogin = true;
         this.authService.Logging(this.model.email, this.model.password);
         this.model.password = '';
         signInForm._submitted = false;

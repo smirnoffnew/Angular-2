@@ -42,8 +42,10 @@
       </div>
 
       <div class="center" style="margin-top: 20px;">
-        <button md-button [disabled]="signUpForm.form.invalid" class="btn btn-primary">Register</button>
-        <a md-button [routerLink]="['/sign-in']" class="btn btn-link">Cancel</a>
+        <button [disabled]="isClickedRegister" (click)="isClickedRegister = true"
+                md-button [disabled]="signUpForm.form.invalid" class="btn btn-primary">Register</button>
+        <a [disabled]="isClickedCancel" (click)="isClickedCancel = true"
+           md-button [routerLink]="['/sign-in']" class="btn btn-link">Cancel</a>
       </div>
 
     </form>

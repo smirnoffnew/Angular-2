@@ -11,7 +11,8 @@
   <md-card-title *ngIf = "isProfileExist" class="center" >
     <span>User profile</span>
     <div *ngIf = "canEditProfileFlag"  class="edit-card-aria-button">
-      <a md-raised-button [routerLink]="['edit']" class="sub-primary-color">Edit profile</a>
+      <a md-raised-button [routerLink]="['edit']" class="sub-primary-color"
+         [disabled]="isClickedEdit" (click)="isClickedEdit = true">Edit profile</a>
     </div>
   </md-card-title>
   <md-card-content color="foreground">
@@ -35,7 +36,8 @@
     </md-grid-list>
 
     <div class="center">
-      <a *ngIf = "canCreatProfileteFlag" md-raised-button color="accent" [routerLink]="['create']">Create your profile</a>
+      <a *ngIf = "canCreatProfileteFlag" md-raised-button  md-btn-success color="accent"
+         [routerLink]="['create']"  [disabled]="isClickedCreate" (click)="isClickedCreate = true" >Create your profile</a>
     </div>
   </md-card-content>
 </md-card>
