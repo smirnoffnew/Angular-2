@@ -59,6 +59,7 @@ export class ProfileEditComponent implements OnInit {
                 (profile: any, user: any) => {
                     return {profile: profile, user: user}
                 })
+
             .subscribe(
                 (result) => {
                     //when user haven't profile
@@ -69,7 +70,7 @@ export class ProfileEditComponent implements OnInit {
                     this.profile = result.profile;
                     this.user = result.user;
 
-                    if (this.profile.data.image !== null)
+                    if (this.profile.data.image !== null && typeof this.profile.data.image !=='undefined')
                         this.fileChangeListener(this.profile.data.image);
 
                     if (this.profile.data.birthday == null) {

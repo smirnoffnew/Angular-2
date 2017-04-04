@@ -6,6 +6,8 @@ import {AuthService} from '../../../core/services/auth.service';
 import {AlertService} from '../../../core/services/alert.service';
 import {ProfileService} from '../../../core/services/profile.service';
 
+import {ProfileModel} from '../../../models/ProfileModel';
+
 
 @Component({
     selector: 'app-profile',
@@ -51,7 +53,7 @@ export class ProfileViewComponent implements OnInit {
                 (result) => {
                     if (result.profile.hasOwnProperty('data')) {
                         this.isProfileExist = true;
-                        this.profile = result.profile.data;
+                        this.profile = new ProfileModel(result.profile.data);
                         this.isImageExist = result.profile.data.hasOwnProperty('image') && result.profile.data.image !== null;
                         this.canEditProfileFlag = result.routeParams['username'] == result.user.username;
                     } else {

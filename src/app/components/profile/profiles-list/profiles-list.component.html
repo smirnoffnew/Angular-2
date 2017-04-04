@@ -16,7 +16,6 @@
       <md-list>
         <md-list-item *ngFor="let item of ( profile | keyAndValueOfObject)">
           <span style="text-transform: capitalize">{{item.key}}: &nbsp;</span>
-          <span *ngIf="item.value == null" class="colorRed"> 'no data' </span>
           <span *ngIf="item.value !== null">{{item.value}}</span>
         </md-list-item>
       </md-list>
