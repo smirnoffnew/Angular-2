@@ -1,8 +1,8 @@
 import {PipeTransform, Pipe} from '@angular/core';
 
 @Pipe({name: 'keyAndValueOfObject'})
-
 export class KeyAndValueOfObject implements PipeTransform {
+
     transform(value, args: string[]): any {
         let keys = [];
         for (let key in value) {
@@ -25,6 +25,3 @@ export class KeyAndValueOfObject implements PipeTransform {
         return values[ 0 ]+'.'+values[ 1 ]+'.'+date.getFullYear();
     }
 }
-
-
-

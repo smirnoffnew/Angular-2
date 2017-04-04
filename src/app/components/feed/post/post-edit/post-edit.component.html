@@ -1,5 +1,5 @@
 <md-card class="card">
-  <md-card-title class="center">Create post</md-card-title>
+  <md-card-title class="center">Edit post</md-card-title>
   <md-card-content>
     <form name="postForm" (ngSubmit)="savePost();" #postForm="ngForm">
 
@@ -27,6 +27,8 @@
 
       <div class="center" style="margin-top: 20px;">
         <button md-button md-raised-button type="submit" color="warn">Save</button>
+        <a md-raised-button color="accent"
+           color="warn" [routerLink]="['/feed/' + editablePost.feedId + '/post/' + editablePost.id]">Cancel</a>
       </div>
     </form>
 
