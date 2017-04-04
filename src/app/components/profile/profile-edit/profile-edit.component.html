@@ -72,7 +72,7 @@
         <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
         <br>
         <span class="result rounded" *ngIf="data.image" >
-          <img [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+        <img class="round-avatar" [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
         </span>
       </div>
 

@@ -32,16 +32,23 @@ export class ProfileEditComponent implements OnInit {
                 private authService: AuthService) {
 
         this.cropperSettings = new CropperSettings();
-        this.cropperSettings.width = 200;
-        this.cropperSettings.height = 200;
-        this.cropperSettings.croppedWidth = 200;
-        this.cropperSettings.croppedHeight = 200;
+
+        //start croppper border
+        this.cropperSettings.width = 300;
+        this.cropperSettings.height = 300;
+
+        //botttom image
+        this.cropperSettings.croppedWidth = 300;
+        this.cropperSettings.croppedHeight = 300;
         this.cropperSettings.canvasWidth = 500;
         this.cropperSettings.canvasHeight = 300;
+
         this.cropperSettings.minWidth = 10;
         this.cropperSettings.minHeight = 10;
-        this.cropperSettings.rounded = false;
-        this.cropperSettings.keepAspect = false;
+
+        this.cropperSettings.rounded = true;
+        this.cropperSettings.keepAspect = true;
+
         this.cropperSettings.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
         this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
         this.cropperSettings.noFileInput = true;
@@ -82,10 +89,7 @@ export class ProfileEditComponent implements OnInit {
             );
     }
 
-    cropped(bounds: Bounds) {
-        this.croppedHeight = bounds.bottom - bounds.top;
-        this.croppedWidth = bounds.right - bounds.left;
-    }
+
 
     fileChangeListener(base64, $event?) {
         let image: any = new Image();

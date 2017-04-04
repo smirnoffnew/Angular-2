@@ -20,7 +20,7 @@
       <md-grid-tile [colspan]="2" [rowspan]="2">
         <h3 *ngIf = "!isImageExist">No photo</h3>
         <div *ngIf = "isImageExist">
-          <img class="image-style" src="{{ profile.image }}">
+          <img class="image-style round-avatar" src="{{ profile.image }}">
         </div>
       </md-grid-tile>
 

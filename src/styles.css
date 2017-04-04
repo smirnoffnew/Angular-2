@@ -81,3 +81,7 @@
     margin-right: auto;
     margin-left: auto;
 }
+
+.round-avatar {
+    border-radius : 50%/50%;
+}
