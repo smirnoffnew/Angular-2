@@ -30,22 +30,19 @@ export class PostEditComponent implements OnInit {
                 private postService: PostService) {
 
         this.cropperSettings = new CropperSettings();
-        this.cropperSettings.width = 300;
-        this.cropperSettings.height = 300;
-        this.cropperSettings.croppedWidth = 300;
-        this.cropperSettings.croppedHeight = 300;
+        this.cropperSettings.width = 100;
+        this.cropperSettings.height = 100;
+        this.cropperSettings.croppedWidth = 400;
+        this.cropperSettings.croppedHeight = 400;
         this.cropperSettings.canvasWidth = 500;
         this.cropperSettings.canvasHeight = 300;
         this.cropperSettings.minWidth = 10;
         this.cropperSettings.minHeight = 10;
-        this.cropperSettings.rounded = true;
-        this.cropperSettings.keepAspect = true;
+        this.cropperSettings.rounded = false;
+        this.cropperSettings.keepAspect = false;
         this.cropperSettings.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
         this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
-
         this.cropperSettings.noFileInput = true;
-        this.editablePost = {};
-        this.data = {};
     }
 
     ngOnInit() {
@@ -56,6 +53,77 @@ export class PostEditComponent implements OnInit {
         );
     }
 
+    cropped(bounds: Bounds) {
+
+        let Ymax = 300;
+        let Xmax = 500;
+        let factor = 1;
+
+        let Y = bounds.bottom - bounds.top;
+        let X = bounds.right - bounds.left;
+
+
+        if ( Y >= Ymax  || X >= Xmax) {
+            if ( Y > Ymax ) {
+                factor = this.getScalingFactorLower(Y, Ymax);
+                this.croppedHeight  = factor * Y;
+                this.croppedWidth = factor * X;
+                if ( this.croppedWidth > Xmax) {
+                    factor = this.getScalingFactorLower(this.croppedWidth, Xmax);
+                    this.croppedHeight = factor * this.croppedHeight;
+                    this.croppedWidth = factor * this.croppedWidth;
+                }
+            } else {
+                factor = this.getScalingFactorLower(X, Xmax);
+                this.croppedHeight = factor * Y;
+                this.croppedWidth = factor * X;
+                if ( this.croppedHeight > Ymax) {
+                    factor = this.getScalingFactorLower(this.croppedWidth, Ymax);
+                    this.croppedHeight = factor * this.croppedHeight;
+                    this.croppedWidth = factor * this.croppedWidth;
+                }
+            }
+
+        } else {
+            if ( Y < Ymax ) {
+                factor = this.getScalingFactorApper(Y, Ymax);
+                this.croppedHeight  = factor * Y;
+                this.croppedWidth = factor * X;
+                if ( this.croppedWidth > Xmax) {
+                    factor = this.getScalingFactorLower(this.croppedWidth, Xmax);
+                    this.croppedHeight = factor * this.croppedHeight;
+                    this.croppedWidth = factor * this.croppedWidth;
+                }
+            } else {
+                factor = this.getScalingFactorApper(X, Xmax);
+                this.croppedHeight = factor * Y;
+                this.croppedWidth = factor * X;
+                if ( this.croppedHeight > Ymax) {
+                    factor = this.getScalingFactorLower(this.croppedWidth, Ymax);
+                    this.croppedHeight = factor * this.croppedHeight;
+                    this.croppedWidth = factor * this.croppedWidth;
+                }
+            }
+        }
+
+        this.cropperSettings.croppedWidth = X;
+        this.cropperSettings.croppedHeight = Y;
+    }
+
+
+    getScalingFactorLower( Actual, Maximum ){
+        let diff = Actual - Maximum;
+        let percent = (100 * diff)/Actual;
+        return Math.abs((100 - percent)/100);
+    }
+
+    getScalingFactorApper( Actual, Maximum ){
+        let diff = Actual - Maximum;
+        let percent = (100 * diff)/Actual;
+        return Math.abs(percent/100) ;
+    }
+
+
     ngAfterViewInit() {
         this.subscribers.postSubscribtion = this.postService.getSingleFeedPost$.subscribe(
             (post: any) => {
@@ -65,10 +133,6 @@ export class PostEditComponent implements OnInit {
         );
     }
 
-    cropped(bounds: Bounds) {
-        this.croppedHeight = bounds.bottom - bounds.top;
-        this.croppedWidth = bounds.right - bounds.left;
-    }
 
     fileChangeListener(base64, $event?) {
         let image: any = new Image();
@@ -88,17 +152,33 @@ export class PostEditComponent implements OnInit {
     }
 
     savePost() {
-        this.editablePost.image = this.data.image;
-        this.subscribers.editablePostSubscribtion = this.editablePost.save().subscribe(
-            () => {
-                this.alertService.success('You Successfully changed your post');
-                this.router.navigate(['/feed']);
 
-            },
-            (error) => {
-                this.alertService.error(error.data.error.message);
-            }
-        );
+        let image = new Image();
+        let that = this;
+        image.onload = function() {
+
+            let canvas = document.createElement('canvas');
+            let ctx = canvas.getContext('2d');
+
+            canvas.width = that.cropperSettings.croppedWidth;
+            canvas.height = that.cropperSettings.croppedHeight;
+
+            ctx.drawImage(this, 0, 0, that.cropperSettings.croppedWidth, that.cropperSettings.croppedHeight);
+
+            that.editablePost.image = canvas.toDataURL();
+            that.subscribers.editablePostSubscribtion = that.editablePost.save().subscribe(
+                () => {
+                    that.alertService.success('You Successfully changed your post');
+                    that.router.navigate(['/feed']);
+
+                },
+                (error) => {
+                    that.alertService.error(error.data.error.message);
+                }
+            );
+        };
+
+        image.src = this.data.image;
     }
 
     ngOnDestroy() {

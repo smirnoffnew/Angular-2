@@ -29,12 +29,16 @@ export class PostCreateComponent implements OnInit {
                private router: Router) {
 
     this.cropperSettings = new CropperSettings();
-    this.cropperSettings.width = 300;
-    this.cropperSettings.height = 300;
-    this.cropperSettings.croppedWidth = 300;
-    this.cropperSettings.croppedHeight = 300;
+
+    this.cropperSettings.width = 100;
+    this.cropperSettings.height = 100;
+
+    this.cropperSettings.croppedWidth = 400;
+    this.cropperSettings.croppedHeight = 400;
+
     this.cropperSettings.canvasWidth = 500;
     this.cropperSettings.canvasHeight = 300;
+
     this.cropperSettings.minWidth = 10;
     this.cropperSettings.minHeight = 10;
 
@@ -80,6 +84,8 @@ export class PostCreateComponent implements OnInit {
       this.croppedWidth = X;
     }
 
+    this.cropperSettings.croppedWidth = X;
+    this.cropperSettings.croppedHeight = Y;
   }
 
 
@@ -90,20 +96,40 @@ export class PostCreateComponent implements OnInit {
   }
 
 
-
   savePost() {
-    this.postService.saveFeedPost({
-      title: this.newPost.title,
-      image: this.data.image,
-      feedId: this.feedService.selfFeedIdObject.id
-    }).subscribe(
-        (data) => {
-          this.alertService.success('You Successfully Created Post');
-          this.router.navigate(['/feed']);
-        },
-        (error) => {
-          this.alertService.error(error.data.error.message);
-        }
-    );
+
+    let image = new Image();
+    let that = this;
+    image.onload = function() {
+
+      let canvas = document.createElement('canvas');
+      let ctx = canvas.getContext('2d');
+
+      // canvas.width = that.cropperSettings.croppedWidth;
+      // canvas.height = that.cropperSettings.croppedHeight;
+
+      canvas.width = document.getElementById('cropedImageCreate').offsetWidth;
+      canvas.height = document.getElementById('cropedImageCreate').offsetHeight;
+
+
+      ctx.drawImage(this, 0, 0, that.cropperSettings.croppedWidth, that.cropperSettings.croppedHeight);
+
+      that.postService.saveFeedPost({
+        title: that.newPost.title,
+        image: canvas.toDataURL(),
+        feedId: that.feedService.selfFeedIdObject.id
+      }).subscribe(
+          (data) => {
+            that.alertService.success('You Successfully Created Post');
+            that.router.navigate(['/feed']);
+          },
+          (error) => {
+            that.alertService.error(error.data.error.message);
+          }
+      );
+    };
+
+    image.src = this.data.image;
+
   }
 }

@@ -16,13 +16,13 @@
       <div class="center image-crop-container" >
         <img-cropper [image]="data" [settings]="cropperSettings" (onCrop)="cropped($event)"></img-cropper>
         <span class="result" *ngIf="data.image" >
-            <img [src]="data.image"
-                 [width]="croppedWidth"
-                 [height]="croppedHeight" >
+            <img id="cropedImageCreate" [src]="data.image" [width]="croppedWidth" [height]="croppedHeight" >
         </span>
       </div>
       <div class="center" style="margin-top: 20px;">
         <button md-button md-raised-button type="submit" color="warn">Save</button>
+        <a md-raised-button color="accent" color="warn" [routerLink]="['/feed']"
+           [disabled]="isClickedCancel" (click)="isClickedCancel = true" >Cancel</a>
       </div>
     </form>
 

@@ -1,37 +1,37 @@
 <md-card class="card">
-  <md-card-title class="center">Edit post</md-card-title>
-  <md-card-content>
-    <form name="postForm" (ngSubmit)="savePost();" #postForm="ngForm">
+    <md-card-title class="center">Edit post</md-card-title>
+    <md-card-content>
+        <form name="postForm" (ngSubmit)="savePost();" #postForm="ngForm">
 
-      <div class="center">
-        <md-input-container>
-          <input mdInput
-                 name="title"
-                 placeholder="title"
-                 [(ngModel)]="editablePost.title"
-                 #title="ngModel">
-        </md-input-container>
-      </div>
+            <div class="center">
+                <md-input-container>
+                    <input mdInput
+                           name="title"
+                           placeholder="title"
+                           [(ngModel)]="editablePost.title"
+                           #title="ngModel">
+                </md-input-container>
+            </div>
 
-      <div class="center">
-        <div class="file-upload">
-          <span class="text">upload</span>
-          <input id="custom-input" type="file" (change)="fileChangeListener(false, $event)">
-        </div>
-        <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
-        <br>
-        <span class="result rounded" *ngIf="data.image" >
-          <img [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
-        </span>
-      </div>
+            <div class="center">
+                <div class="file-upload">
+                    <span class="text">upload</span>
+                    <input id="custom-input" type="file" (change)="fileChangeListener(false, $event)">
+                </div>
+                <img-cropper #cropper [image]="data" [settings]="cropperSettings" (onCrop)="cropped($event)" ></img-cropper>
+                <br>
+                <span class="result">
+                    <img id="cropedImageEdit" [src]="data.image" [width]="croppedWidth" [height]="croppedHeight">
+                </span>
+            </div>
 
-      <div class="center" style="margin-top: 20px;">
-        <button md-button md-raised-button type="submit" color="warn">Save</button>
-        <a md-raised-button color="accent"
-           color="warn" [routerLink]="['/feed/' + editablePost.feedId + '/post/' + editablePost.id]">Cancel</a>
-      </div>
-    </form>
+            <div class="center" style="margin-top: 20px;">
+                <button md-button md-raised-button type="submit" color="warn">Save</button>
+                <a md-raised-button color="accent"
+                   color="warn" [routerLink]="['/feed/' + editablePost.feedId + '/post/' + editablePost.id]">Cancel</a>
+            </div>
+        </form>
 
-  </md-card-content>
+    </md-card-content>
 </md-card>
 

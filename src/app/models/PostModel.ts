@@ -1,6 +1,10 @@
 export class PostModel {
     title: string = null;
     image: string = null;
+
+    isClickedDELETE?: any = null;
+    isClickedEDIT?: any = null;
+
     id: string = null;
     feedId: string = null;
 

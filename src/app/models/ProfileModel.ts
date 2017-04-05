@@ -5,8 +5,6 @@ export class ProfileModel {
     birthday: string = null;
     fullname: string = null;
     phone: string = null;
-    height: number = null;
-    weight: number = null;
     snickersBrand: string = null;
     image: string = null;
     isClickedChangeUser?: boolean;
