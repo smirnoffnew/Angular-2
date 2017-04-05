@@ -78,7 +78,7 @@
 
       <div class="center" style="margin-top: 20px;">
         <button md-raised-button md-button type="submit" color="warn"
-                [disabled]="isClickedSave" (click)="isClickedSave = true">Save</button>
+                [disabled]="isClickedSave" >Save</button>
         <a md-raised-button color="accent" color="warn" [routerLink]="['/profile/' + user.username]"
            [disabled]="isClickedCancel" (click)="isClickedCancel = true" >Cancel</a>
       </div>

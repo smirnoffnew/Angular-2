@@ -19,9 +19,9 @@ export class ProfileEditComponent implements OnInit {
     private user: any = {};
     private data: any = {};
 
+    private isClickedSave = false;
+
     private cropperSettings: CropperSettings;
-    private croppedWidth: number;
-    private croppedHeight: number;
     private profileSubscription: any;
 
     @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
@@ -109,6 +109,7 @@ export class ProfileEditComponent implements OnInit {
     }
 
     saveProfile() {
+        this.isClickedSave = true;
         let profileObject = {
             id: this.profile.data.id,
             clientId: this.profile.data.clientId,

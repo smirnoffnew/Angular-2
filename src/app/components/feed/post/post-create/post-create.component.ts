@@ -18,8 +18,8 @@ export class PostCreateComponent implements OnInit {
   private cropperSettings: CropperSettings;
   private croppedWidth: number;
   private croppedHeight: number;
-  private newPost: any;
-  private data: any;
+  private newPost: any = {};
+  private data: any = {};
 
   @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
 
@@ -37,22 +37,59 @@ export class PostCreateComponent implements OnInit {
     this.cropperSettings.canvasHeight = 300;
     this.cropperSettings.minWidth = 10;
     this.cropperSettings.minHeight = 10;
-    this.cropperSettings.rounded = true;
-    this.cropperSettings.keepAspect = true;
+
+    this.cropperSettings.rounded = false;
+    this.cropperSettings.keepAspect = false;
+
     this.cropperSettings.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
     this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
     this.cropperSettings.noFileInput = false;
-    this.newPost = {};
-    this.data = {};
   }
 
   ngOnInit() {
   }
 
   cropped(bounds: Bounds) {
-    this.croppedHeight = bounds.bottom - bounds.top;
-    this.croppedWidth = bounds.right - bounds.left;
+
+    let Ymax = 300;
+    let Xmax = 500;
+    let factor = 1;
+
+    let Y = bounds.bottom - bounds.top;
+    let X = bounds.right - bounds.left;
+
+
+    if ( Y > Ymax  || X > Xmax) {
+        if ( Y > Ymax ) {
+          factor = this.getScalingFactor(Y, Ymax);
+          this.croppedHeight  = factor * Y;
+          this.croppedWidth = factor * X;
+          if ( this.croppedWidth > Xmax) {
+            factor = this.getScalingFactor(this.croppedWidth, Xmax);
+            this.croppedHeight = factor * this.croppedHeight;
+            this.croppedWidth = factor * this.croppedWidth;
+          }
+        } else {
+          factor = this.getScalingFactor(X, Xmax);
+          this.croppedHeight = factor * Y;
+          this.croppedWidth = factor * X;
+        }
+
+    } else {
+      this.croppedHeight = Y;
+      this.croppedWidth = X;
+    }
+
   }
+
+
+  getScalingFactor( Actual, Maximum ){
+    let diff = Actual - Maximum;
+    let percent = (100 * diff)/Actual;
+    return (100 - percent)/100;
+  }
+
+
 
   savePost() {
     this.postService.saveFeedPost({
