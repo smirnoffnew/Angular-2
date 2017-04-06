@@ -14,7 +14,7 @@ import { TokenService } from './core/services/token.service';
 export class AppComponent implements OnInit{
 
   private navbarFlag:boolean;
-  private currentUser:any;
+  private currentUser:any = {};
   private subscribers: any = {};
 
   constructor( private authService:AuthService,
@@ -25,8 +25,8 @@ export class AppComponent implements OnInit{
 
 
   ngOnInit(){
-    this.subscribers.currentUser = this.authService.currentUser$;
-    this.router.events.subscribe( (url:any) => {
+   this.currentUser = this.authService.currentUser$;
+    this.subscribers.routerEventSubscription = this.router.events.subscribe( (url:any) => {
       this.navbarFlag = this.tokenService.isTokenExist();
     })
   }

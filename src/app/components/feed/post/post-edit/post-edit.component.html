@@ -28,7 +28,7 @@
             <div class="center" style="margin-top: 20px;">
                 <button md-button md-raised-button type="submit" color="warn">Save</button>
                 <a md-raised-button color="accent"
-                   color="warn" [routerLink]="['/feed/' + editablePost.feedId + '/post/' + editablePost.id]">Cancel</a>
+                   color="warn" [routerLink]="['/feed', editablePost.feedId, 'post', editablePost.id]">Cancel</a>
             </div>
         </form>
 

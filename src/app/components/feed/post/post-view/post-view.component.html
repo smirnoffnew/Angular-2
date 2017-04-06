@@ -1,7 +1,7 @@
 <md-card class="card center">
   <md-card-header class="feed-card">
     <md-card-title>
-      <a [routerLink]="['/feed/' + post.feedId + '/post/' + post.id]" >{{post.id}}</a>
+      <a [routerLink]="['/feed', post.feedId, 'post', post.id]" >{{post.id}}</a>
     </md-card-title>
   </md-card-header>
   <p>
@@ -13,7 +13,7 @@
     </p>
   </md-card-content>
   <md-card-actions>
-    <button md-button md-raised-button [routerLink]="['/feed/' + post.feedId + '/post/' + post.id + '/edit']">EDIT</button>
+    <button md-button md-raised-button [routerLink]="['/feed',  post.feedId, 'post',  post.id, 'edit']">EDIT</button>
     <button md-button md-raised-button (click)="remove()">DELETE</button>
   </md-card-actions>
 </md-card>
