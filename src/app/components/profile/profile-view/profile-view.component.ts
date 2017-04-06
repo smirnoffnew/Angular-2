@@ -10,7 +10,7 @@ import {ProfileModel} from '../../../models/ProfileModel';
 
 
 @Component({
-    selector: 'app-profile',
+    selector: 'app-profile-view',
     templateUrl: 'profile-view.component.html',
     styleUrls: ['profile-view.component.css'],
 })

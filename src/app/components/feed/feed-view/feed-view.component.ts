@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 
 import {AlertService} from '../../../core/services/alert.service';
-import {AuthService} from '../../../core/services/auth.service';
 import {FeedService} from '../../../core/services/feed.service';
 import {PostService} from '../../../core/services/post.service';
 

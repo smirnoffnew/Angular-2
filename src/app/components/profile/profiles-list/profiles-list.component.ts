@@ -6,10 +6,8 @@ import {ProfileService} from '../../../core/services/profile.service';
 import {ProfileModel} from '../../../models/ProfileModel';
 import {TokenService} from '../../../core/services/token.service';
 import {AuthService} from '../../../core/services/auth.service';
-import {LogOutService} from '../../../core/services/logout.service';
 import {AlertService} from '../../../core/services/alert.service';
 import {FeedService} from '../../../core/services/feed.service';
-
 
 import * as _ from 'lodash';
 
@@ -21,20 +19,21 @@ import * as _ from 'lodash';
 })
 
 export class ProfilesListComponent implements OnInit {
-    private profiles: any;
-    private user: any;
-    private isClickedChangeUser:any;
+
+    private subscribers:any = {};
+    private profiles: any = [];
+    private user: any = {};
+    private isClickedChangeUser:boolean;
 
     constructor(private profileService: ProfileService,
                 private restangular: Restangular,
                 private tokenService: TokenService,
                 private router: Router,
                 private authService: AuthService,
-                private logOutService: LogOutService,
                 private feedService: FeedService,
                 private alertService: AlertService) {
 
-        this.authService.currentUser$.subscribe(
+        this.subscribers.currentUserSubscription = this.authService.currentUser$.subscribe(
             (user) => {
                 this.user = user;
             }
@@ -58,7 +57,7 @@ export class ProfilesListComponent implements OnInit {
 
     changeUser(profile) {
         profile.isClickedChangeUser = true;
-        this.restangular.one('clients', profile.clientId).all('accessTokens').getList()
+        this.subscribers.CahngeUserGEtTokenSubscription = this.restangular.one('clients', profile.clientId).all('accessTokens').getList()
             .subscribe(
                 (tokensArray) => {
                     if (tokensArray[0].hasOwnProperty('id')) {
@@ -76,6 +75,14 @@ export class ProfilesListComponent implements OnInit {
                     this.alertService.error(error.data.error.message);
                 }
             );
+    }
+
+    ngOnDestroy() {
+        for (let property in this.subscribers) {
+            if ((typeof this.subscribers[property] !== 'undefined') && (this.subscribers[property] !== null)) {
+                this.subscribers[property].unsubscribe();
+            }
+        }
     }
 
 }

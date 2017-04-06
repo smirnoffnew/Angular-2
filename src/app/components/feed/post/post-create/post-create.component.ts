@@ -18,6 +18,8 @@ export class PostCreateComponent implements OnInit {
   private cropperSettings: CropperSettings;
   private croppedWidth: number;
   private croppedHeight: number;
+
+  private subscribers: any = {};
   private newPost: any = {};
   private data: any = {};
 
@@ -105,16 +107,16 @@ export class PostCreateComponent implements OnInit {
       let canvas = document.createElement('canvas');
       let ctx = canvas.getContext('2d');
 
-      // canvas.width = that.cropperSettings.croppedWidth;
-      // canvas.height = that.cropperSettings.croppedHeight;
+      canvas.width = that.cropperSettings.croppedWidth;
+      canvas.height = that.cropperSettings.croppedHeight;
 
-      canvas.width = document.getElementById('cropedImageCreate').offsetWidth;
-      canvas.height = document.getElementById('cropedImageCreate').offsetHeight;
+      // canvas.width = document.getElementById('cropedImageCreate').offsetWidth;
+      // canvas.height = document.getElementById('cropedImageCreate').offsetHeight;
 
 
       ctx.drawImage(this, 0, 0, that.cropperSettings.croppedWidth, that.cropperSettings.croppedHeight);
 
-      that.postService.saveFeedPost({
+      that.subscribers.postServiceSubscription = that.postService.saveFeedPost({
         title: that.newPost.title,
         image: canvas.toDataURL(),
         feedId: that.feedService.selfFeedIdObject.id
@@ -130,6 +132,13 @@ export class PostCreateComponent implements OnInit {
     };
 
     image.src = this.data.image;
+  }
 
+  ngOnDestroy() {
+    for (let property in this.subscribers) {
+      if ((typeof this.subscribers[property] !== 'undefined') && (this.subscribers[property] !== null)) {
+        this.subscribers[property].unsubscribe();
+      }
+    }
   }
 }

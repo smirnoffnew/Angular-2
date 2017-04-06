@@ -27,7 +27,7 @@ export class PostViewComponent implements OnInit {
   }
 
   remove () {
-    this.post.remove()
+      this.subscribers.postRemoveSubscription = this.post.remove()
         .subscribe(
         (post)=>{
           this.router.navigate(['/feed']);

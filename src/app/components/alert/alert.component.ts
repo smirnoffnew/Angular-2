@@ -3,7 +3,7 @@ import {MdSnackBar} from '@angular/material';
 import {AlertService} from '../../core/services/alert.service';
 
 @Component({
-    selector: 'alert',
+    selector: 'app-alert',
     templateUrl: './alert.component.html',
     styleUrls: ['./alert.component.css']
 })

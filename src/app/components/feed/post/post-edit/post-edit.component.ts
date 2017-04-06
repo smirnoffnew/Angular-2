@@ -164,13 +164,12 @@ export class PostEditComponent implements OnInit {
             canvas.height = that.cropperSettings.croppedHeight;
 
             ctx.drawImage(this, 0, 0, that.cropperSettings.croppedWidth, that.cropperSettings.croppedHeight);
-
             that.editablePost.image = canvas.toDataURL();
+
             that.subscribers.editablePostSubscribtion = that.editablePost.save().subscribe(
                 () => {
                     that.alertService.success('You Successfully changed your post');
                     that.router.navigate(['/feed']);
-
                 },
                 (error) => {
                     that.alertService.error(error.data.error.message);
