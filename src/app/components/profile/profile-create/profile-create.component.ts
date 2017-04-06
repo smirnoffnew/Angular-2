@@ -65,7 +65,7 @@ export class ProfileCreateComponent implements OnInit {
             .subscribe(
                 (result)=>{
                     if ( result.profile.hasOwnProperty('data') ) {
-                        this.router.navigate(['/profile/' + result.user.username]);
+                        this.router.navigate(['/profile', result.user.username]);
                     } else {
                         this.profile.birthday = new Date('1985.01.01');
                         this.user = result.user;
@@ -107,7 +107,7 @@ export class ProfileCreateComponent implements OnInit {
             .subscribe(
                 (data) => {
                     this.alertService.success('You successfully created your profile');
-                    this.router.navigate(['profile/' + this.user.username]);
+                    this.router.navigate(['profile', this.user.username]);
                     this.profileService.selfProfileAlreadyGetting.data = new ProfileModel(data);
                 },
                 (error) => {

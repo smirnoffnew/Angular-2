@@ -44,7 +44,7 @@ export class FeedViewComponent implements OnInit {
         this.subscribers.feedRemoveSubscription = this.postService.removeFeedPost(post.feedId, post.id).subscribe(
             () => {
                 this.posts = _.without(this.posts, post);
-                this.alertService.success('Post ' + post.title + ' successfully removed');
+                this.alertService.success(`Post ${post.title} successfully removed`);
             },
             (error) => {
                 this.alertService.error(error.data.error.message);

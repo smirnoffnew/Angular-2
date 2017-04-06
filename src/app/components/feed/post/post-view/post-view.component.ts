@@ -31,7 +31,7 @@ export class PostViewComponent implements OnInit {
         .subscribe(
         (post)=>{
           this.router.navigate(['/feed']);
-          this.alertService.success('Post ' +post.id+ ' successfully removed');
+          this.alertService.success(`Post ${post.id} successfully removed`);
         },
         (error) => {
           this.alertService.error(error.data.error.message);

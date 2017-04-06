@@ -9,6 +9,7 @@ import {AuthService} from '../../core/services/auth.service';
 export class SignUpComponent implements OnInit {
 
     model: any = {};
+    isClickedRegister: boolean = false;
 
     constructor(private authService: AuthService) {
     }
@@ -17,6 +18,7 @@ export class SignUpComponent implements OnInit {
     }
 
     register(signUpForm) {
+        this.isClickedRegister = true;
         let dataForCreateUser = {
             email: this.model.email,
             username: this.model.username,

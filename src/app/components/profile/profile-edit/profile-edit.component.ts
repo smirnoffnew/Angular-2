@@ -70,8 +70,8 @@ export class ProfileEditComponent implements OnInit {
             .subscribe(
                 (result) => {
                     //when user haven't profile
-                    if (!result.profile.hasOwnProperty('data') && this.router.url == '/profile/' + result.user.username + '/edit') {
-                        this.router.navigate(['/profile/' + result.user.username]);
+                    if (!result.profile.hasOwnProperty('data') && this.router.url == `/profile' + ${result.user.username} edit`) {
+                        this.router.navigate(['/profile', result.user.username]);
                     }
 
                     this.profile = result.profile;
@@ -126,7 +126,7 @@ export class ProfileEditComponent implements OnInit {
             .subscribe(
                 (data) => {
                     this.alertService.success('Your profile successfully saved');
-                    this.router.navigate(['profile/' + this.user.username]);
+                    this.router.navigate(['profile/', this.user.username]);
                     this.profileService.selfProfileAlreadyGetting.data = new ProfileModel(data);
                 },
                 (error) => {
